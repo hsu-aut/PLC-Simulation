@@ -12,15 +12,10 @@ import java.util.ResourceBundle;
 
 import gui.elements.GUIElement;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.elements.ActuatorDefinition;
 import model.simulation.FtPlantSimulation;
@@ -28,8 +23,6 @@ import model.simulation.SimulationBuilder;
 
 public class Controller implements Initializable {
 
-	@FXML
-	private MenuItem mIPreferences;
 	@FXML
 	private Button btnStart;
 	@FXML
@@ -70,31 +63,6 @@ public class Controller implements Initializable {
 		}
 	}
 	
-	@FXML
-	private void btnClose_oA() {
-		primaryStage.close();
-	}
-	
-	@FXML
-	private void mIPreferencesAction() {
-		try {
-			Stage stage = new Stage();
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preferences.fxml"));
-			Parent root = loader.load();
-			PreferencesController controller = (PreferencesController) loader.getController();
-			controller.setStage(stage, this);
-
-			Scene scene = new Scene(root);
-			stage.setTitle("Preferences");
-			stage.setScene(scene);
-			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(primaryStage);
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public void logConsole(String msg) {
 		Date date = new Date();
 		SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
@@ -108,7 +76,7 @@ public class Controller implements Initializable {
 			simulation = new SimulationBuilder().build(properties.getProperty("opcUaServerEndpointUrl"), Integer.valueOf(properties.getProperty("updateInterval")));
 			simulation.setController(this);
 
-			//Manuelles Mapping
+			// Binding Logic and GUI-Elements
 			GUIElement guiElement = new GUIElement(con1, simulation.getConveyors().get(ActuatorDefinition.B1_A01), this);
 			conveyors.add(guiElement);
 			guiElement = new GUIElement(con2, simulation.getConveyors().get(ActuatorDefinition.B1_A02), this);

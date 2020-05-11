@@ -107,8 +107,9 @@ public class FtPlantSimulation {
 			conv.update();
 		}
 		
-		//Update GUI
-		controller.updateConveyors();
+		// Update GUI
+		if(controller != null)
+			controller.updateConveyors();
 		
 		switch (this.wpState) {
 		case AtStorage: {
