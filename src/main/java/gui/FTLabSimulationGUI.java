@@ -23,7 +23,7 @@ public class FTLabSimulationGUI extends Application {
 		logger.info("Java Version " + System.getProperty("java.version"));		
 		logger.info("JavaFX Version " + System.getProperty("javafx.version"));
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/window.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/window.fxml"));
 		Parent root = loader.load();
 		Controller controller = (Controller) loader.getController();
 		controller.setStage(stage);

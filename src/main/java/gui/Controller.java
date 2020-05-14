@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import gui.elements.GUIElement;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -43,7 +44,7 @@ public class Controller implements Initializable {
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
-			properties.load(new FileInputStream(this.getClass().getResource("config.properties").getPath()));
+			properties.load(new FileInputStream(this.getClass().getClassLoader().getResource("config/config.properties").getPath()));
 		} catch (IOException e) {
 			e.printStackTrace();
 			logConsole(e.getMessage());
