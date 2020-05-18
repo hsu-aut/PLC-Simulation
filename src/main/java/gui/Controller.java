@@ -44,7 +44,7 @@ public class Controller implements Initializable {
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
-			properties.load(new FileInputStream(this.getClass().getClassLoader().getResource("config/config.properties").getPath()));
+			properties.load(this.getClass().getClassLoader().getResourceAsStream("config/config.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			logConsole(e.getMessage());

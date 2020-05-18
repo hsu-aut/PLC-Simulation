@@ -18,7 +18,7 @@ public class FTLabSimulationGUI extends Application {
 	
 	@Override
 	public void start(Stage stage) throws IOException {
-		PropertyConfigurator.configure("log4j.properties");
+		PropertyConfigurator.configure(this.getClass().getClassLoader().getResourceAsStream("config/log4j.properties"));
 		
 		logger.info("Java Version " + System.getProperty("java.version"));		
 		logger.info("JavaFX Version " + System.getProperty("javafx.version"));
