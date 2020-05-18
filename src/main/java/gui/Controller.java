@@ -10,12 +10,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import gui.elements.GUIElement;
+import gui.elements.ConveyorElement;
+import gui.elements.ConveyorShape;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.elements.ActuatorDefinition;
@@ -36,15 +37,18 @@ public class Controller implements Initializable {
 	private Rectangle con3;
 	@FXML
 	private Rectangle con4;
+	@FXML 
+	private Pane pane;
 
 	private Stage primaryStage;
 	private Properties properties = new Properties();
 	private FtPlantSimulation simulation;
-	private List<GUIElement> conveyors = new ArrayList<GUIElement>();
+	private List<ConveyorElement> conveyors = new ArrayList<ConveyorElement>();
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			properties.load(this.getClass().getClassLoader().getResourceAsStream("config/config.properties"));
+			System.out.println(properties);
 		} catch (IOException e) {
 			e.printStackTrace();
 			logConsole(e.getMessage());
@@ -56,7 +60,7 @@ public class Controller implements Initializable {
 		if(btnStart.getText().equals("Start")) {
 			btnStart.setText("Stop");
 			logConsole("Start Simulation");
-			simulation.run();		
+			simulation.run();	
 		}else {
 			btnStart.setText("Start");
 			logConsole("Stop Simulation");
@@ -76,22 +80,19 @@ public class Controller implements Initializable {
 		try {
 			simulation = new SimulationBuilder().build(properties.getProperty("opcUaServerEndpointUrl"), Integer.valueOf(properties.getProperty("updateInterval")));
 			simulation.setController(this);
-
+			
 			// Binding Logic and GUI-Elements
-			GUIElement guiElement = new GUIElement(con1, simulation.getConveyors().get(ActuatorDefinition.B1_A01), this);
-			conveyors.add(guiElement);
-			guiElement = new GUIElement(con2, simulation.getConveyors().get(ActuatorDefinition.B1_A02), this);
-			conveyors.add(guiElement);
-			guiElement = new GUIElement(con3, simulation.getConveyors().get(ActuatorDefinition.B1_A07), this);
-			conveyors.add(guiElement);
-			guiElement = new GUIElement(con1, simulation.getConveyors().get(ActuatorDefinition.B1_A08), this);
-			conveyors.add(guiElement);
+//			new ConveyorShape(pane, 220, 50, true);
+			ConveyorElement element = new ConveyorElement(new ConveyorShape(pane, 220, 50, true), simulation.getConveyors().get(ActuatorDefinition.B1_A01), this, simulation.getConveyors().get(ActuatorDefinition.B1_A01), null);
+			conveyors.add(element);
+			element = new ConveyorElement(new ConveyorShape(pane, 50, 50, true), simulation.getConveyors().get(ActuatorDefinition.B1_A02), this, simulation.getConveyors().get(ActuatorDefinition.B1_A02), null);
+			conveyors.add(element);
+			
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	public Properties getProp() {
@@ -103,8 +104,8 @@ public class Controller implements Initializable {
 	}
 	
 	public void updateConveyors() {
-		for (GUIElement guiElement : conveyors) {
-			guiElement.update();
+		for (ConveyorElement conveyor : conveyors) {
+			conveyor.update();
 		}
 	}
 

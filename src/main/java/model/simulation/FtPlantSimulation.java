@@ -99,6 +99,7 @@ public class FtPlantSimulation {
 	 * Update-method that is periodically called to update the simulation state
 	 */
 	public void update() {
+		System.out.println("Updating simulation");
 		long runtime = System.currentTimeMillis() - this.startTime;
 		logger.debug("Updating simulation, runtime: " + runtime);
 

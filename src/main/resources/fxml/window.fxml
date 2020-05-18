@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
@@ -36,97 +37,7 @@
          <children>
       				<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
                <content>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle fx:id="con1" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="830.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-                        <Rectangle fx:id="con2" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="673.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-                        <Rectangle fx:id="con3" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="516.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-                        <Rectangle fx:id="con4" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="359.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-                        <Circle fill="GAINSBORO" layoutX="276.0" layoutY="268.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="40.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="150.0" layoutX="251.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
-                        <Label layoutX="927.0" layoutY="177.0" text="B1_S06">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="937.0" layoutY="303.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="942.0" layoutY="284.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Label layoutX="927.0" layoutY="323.0" text="B1_S02">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="739.0" layoutY="213.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="744.0" layoutY="232.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Label layoutX="728.0" layoutY="193.0" text="B1_S03">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="581.0" layoutY="304.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="586.0" layoutY="285.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Label layoutX="571.0" layoutY="324.0" text="B1_S07">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Circle fill="#ff9021" layoutX="850.0" layoutY="293.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Circle fill="#ff9021" layoutX="850.0" layoutY="243.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Label layoutX="830.0" layoutY="211.0" text="B1_S05">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="830.0" layoutY="305.0" text="B1_S04">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="100.0" layoutX="429.0" layoutY="163.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="100.0" layoutX="429.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="153.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="353.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Label layoutX="414.0" layoutY="375.0" text="B1_S12">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="414.0" layoutY="294.0" text="B1_S13">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="414.0" layoutY="223.0" text="B1_S11">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="414.0" layoutY="135.0" text="B1_S10">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="478.0" layoutY="302.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="483.0" layoutY="283.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Label layoutX="468.0" layoutY="322.0" text="B1_S08">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="369.0" layoutY="303.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="374.0" layoutY="284.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-                        <Label layoutX="359.0" layoutY="323.0" text="B1_S09">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Rectangle arcHeight="5.0" fill="#1cbd1c" height="20.0" layoutX="937.0" layoutY="219.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
-                        <Line endX="402.20001220703125" endY="112.0" layoutX="556.0" layoutY="87.0" startX="391.00006103515625" startY="132.0" strokeWidth="2.0" />
-                     </children>
-                  </AnchorPane>
+                  <Pane fx:id="pane" prefHeight="400.0" prefWidth="200.0" />
                </content>
             </ScrollPane>
             <TextArea fx:id="tAConsole">
@@ -134,6 +45,97 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
             </TextArea>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Rectangle fx:id="con1" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="830.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
+                  <Rectangle fx:id="con2" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="673.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
+                  <Rectangle fx:id="con3" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="516.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
+                  <Rectangle fx:id="con4" arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="359.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
+                  <Circle fill="GAINSBORO" layoutX="276.0" layoutY="268.0" radius="75.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="50.0" layoutX="40.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="150.0" layoutX="251.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
+                  <Label layoutX="927.0" layoutY="177.0" text="B1_S06">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="937.0" layoutY="303.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="942.0" layoutY="284.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Label layoutX="927.0" layoutY="323.0" text="B1_S02">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="739.0" layoutY="213.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="744.0" layoutY="232.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Label layoutX="728.0" layoutY="193.0" text="B1_S03">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="581.0" layoutY="304.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="586.0" layoutY="285.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Label layoutX="571.0" layoutY="324.0" text="B1_S07">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Circle fill="#ff9021" layoutX="850.0" layoutY="293.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle fill="#ff9021" layoutX="850.0" layoutY="243.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label layoutX="830.0" layoutY="211.0" text="B1_S05">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="830.0" layoutY="305.0" text="B1_S04">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="100.0" layoutX="429.0" layoutY="163.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="100.0" layoutX="429.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="153.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="243.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="424.0" layoutY="353.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Label layoutX="414.0" layoutY="375.0" text="B1_S12">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="414.0" layoutY="294.0" text="B1_S13">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="414.0" layoutY="223.0" text="B1_S11">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="414.0" layoutY="135.0" text="B1_S10">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="478.0" layoutY="302.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="483.0" layoutY="283.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Label layoutX="468.0" layoutY="322.0" text="B1_S08">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#ff1f1f" height="20.0" layoutX="369.0" layoutY="303.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Rectangle arcHeight="5.0" fill="#ff9021" height="20.0" layoutX="374.0" layoutY="284.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+                  <Label layoutX="359.0" layoutY="323.0" text="B1_S09">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" fill="#1cbd1c" height="20.0" layoutX="937.0" layoutY="219.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                  <Line endX="402.20001220703125" endY="112.0" layoutX="556.0" layoutY="87.0" startX="391.00006103515625" startY="132.0" strokeWidth="2.0" />
+               </children>
+            </AnchorPane>
          </children>
       </VBox>
 	</children>
