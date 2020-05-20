@@ -53,6 +53,10 @@ public class FtPlantSimulation {
 		this.sensors.put(sensorName, sensor);
 	}
 
+	public Map<SensorDefinition, BinarySensor> getSensors() {
+		return sensors;
+	}
+
 	void addConveyor(ActuatorDefinition actuatorName, Conveyor conveyor) {
 		this.conveyors.put(actuatorName, conveyor);
 	}
@@ -110,7 +114,7 @@ public class FtPlantSimulation {
 		
 		// Update GUI
 		if(controller != null)
-			controller.updateConveyors();
+			controller.update();
 		
 		switch (this.wpState) {
 		case AtStorage: {

@@ -1,18 +1,17 @@
-package gui.elements;
+package gui.element.shape;
 
+import gui.element.ShapeHelper;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 
-public class ConveyorShape implements IGUIElement {
+public class ConveyorShape{
 	
-	boolean horizontal;
-	Rectangle rec1, rec2, rec3, rec4, rec5;
-	Polyline left1, left2, left3, left4, right1, right2, right3, right4;
+	private Rectangle rec1, rec2, rec3, rec4, rec5;
+	private Polyline left1, left2, left3, left4, right1, right2, right3, right4;
 	
 	public ConveyorShape(Pane pane, double posX, double posY, boolean horizontal) {
-		this.horizontal = horizontal;
 		if(horizontal) {
 			drawHorizontal(pane, posX, posY);
 		}else {
@@ -163,13 +162,6 @@ public class ConveyorShape implements IGUIElement {
 		}else {
 			rec5.setFill(ShapeHelper.ACTIVE);
 		}
-	}
-
-	@Override
-	public void deactivate() {
-		deactivateLeft();
-		deactivateRight();
-		resetPosition();
 	}
 	
 }

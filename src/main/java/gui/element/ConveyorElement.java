@@ -1,6 +1,7 @@
-package gui.elements;
+package gui.element;
 
 import gui.Controller;
+import gui.element.shape.ConveyorShape;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -10,10 +11,11 @@ import javafx.beans.value.ObservableValue;
 import model.elements.BinaryActuator;
 import model.elements.Conveyor;
 
-public class ConveyorElement {
+public class ConveyorElement implements IGUI {
 
 	private Conveyor logic;
-//	private BinaryActuator left, right;
+	private ConveyorShape shape;
+	private BinaryActuator left, right;
 	
 	private BooleanProperty workpiecePresent = new SimpleBooleanProperty(false);
 	private FloatProperty workpiecePosition = new SimpleFloatProperty();
@@ -23,14 +25,15 @@ public class ConveyorElement {
 
 	public ConveyorElement(ConveyorShape shape, Conveyor logic, Controller controller, BinaryActuator left, BinaryActuator right) {
 		this.logic = logic;
-//		this.left = left;
-//		this.right = right;
+		this.shape = shape;
+		this.left = left;
+		this.right = right;
 		
 		workpiecePresent.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if(newValue == false) {
-					shape.deactivate();
+					shape.resetPosition();
 				}
 			}
 		});
@@ -44,35 +47,50 @@ public class ConveyorElement {
 			}
 		});
 		
-//		leftActuator.addListener(new ChangeListener<Boolean>() {
-//			@Override
-//			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//				if(newValue == true) {
-//					shape.activateLeft();
-//				}else {
-//					shape.deactivateLeft();
-//				}
-//			}
-//		});
-//		
-//		rightActuator.addListener(new ChangeListener<Boolean>() {
-//			@Override
-//			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//				if(newValue == true) {
-//					shape.activateRight();
-//				}else {
-//					shape.deactivateRight();
-//				}
-//			}
-//		});
+		leftActuator.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if(newValue == true) {
+					shape.activateLeft();
+				}else {
+					shape.deactivateLeft();
+				}
+			}
+		});
+		
+		rightActuator.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if(newValue == true) {
+					shape.activateRight();
+				}else {
+					shape.deactivateRight();
+				}
+			}
+		});
 	}
 
+	@Override
 	public void update() {
-		System.out.println("Updating GUI");
-		workpiecePresent.set(logic.workpieceIsPresent());
-		workpiecePosition.set(logic.getRelativeWorkpiecePosition());
-//		leftActuator.set(left.isOn());
-//		rightActuator.set(right.isOn());
+		if(logic != null && logic.workpieceIsPresent()) {
+			workpiecePosition.set(logic.getRelativeWorkpiecePosition());			
+			workpiecePresent.set(true);
+		}else {
+			workpiecePresent.set(false);
+		}
+		if(left != null)
+			leftActuator.set(left.isOn());
+		if(right != null)
+			rightActuator.set(right.isOn());
 	}
+
+	@Override
+	public void reset() {
+		shape.resetPosition();
+		shape.deactivateLeft();
+		shape.deactivateRight();
+	}
+
+
 
 }
