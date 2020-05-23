@@ -12,7 +12,7 @@ import model.simulation.FtPlantSimulation;
 /**
  * A basic class defining common attributes and methods of all elements of the FT plant
  */
-public class PlantElement {
+public class BinaryPlantElement {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -21,7 +21,7 @@ public class PlantElement {
 	private String comment;
 	protected FtPlantSimulation simulation;
 	
-	public PlantElement(String tagName, String nodeIdString, String comment, FtPlantSimulation simulation) {
+	public BinaryPlantElement(String tagName, String nodeIdString, String comment, FtPlantSimulation simulation) {
 		this.tagName = tagName;
 		this.nodeId = NodeId.parse(nodeIdString);
 		this.comment = comment;

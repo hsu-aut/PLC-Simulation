@@ -12,7 +12,7 @@ import model.simulation.FtPlantSimulation;
  * Represents a simple binary actuator that can be switched on and off by a PLC
  * Is directly connected to an output variable of the OPC UA server / the PLC
  */
-public class BinaryActuator extends PlantElement {
+public class BinaryActuator extends BinaryPlantElement {
 	
 	private boolean on;
 	

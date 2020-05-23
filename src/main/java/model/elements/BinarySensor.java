@@ -6,7 +6,7 @@ import model.simulation.FtPlantSimulation;
  * Represents a simple binary sensor that is read by a PLC and that can be switched on and off by the simulation.
  * Is directly connected to an input variable of the OPC UA server / the PLC
  */
-public class BinarySensor extends PlantElement {
+public class BinarySensor extends BinaryPlantElement {
 	
 	private boolean state;
 	
