@@ -23,11 +23,11 @@ public class ConveyorElement implements IGUI {
 	private BooleanProperty leftActuator = new SimpleBooleanProperty(false);
 	private BooleanProperty rightActuator = new SimpleBooleanProperty(false);
 
-	public ConveyorElement(ConveyorShape shape, Conveyor logic, Controller controller, BinaryActuator left, BinaryActuator right) {
-		this.logic = logic;
+	public ConveyorElement(ConveyorShape shape, Conveyor conveyorLogic, Controller controller) {
+		this.logic = conveyorLogic;
 		this.shape = shape;
-		this.left = left;
-		this.right = right;
+		this.left = conveyorLogic.getMotorLeft();
+		this.right = conveyorLogic.getMotorRight();
 		
 		workpiecePresent.addListener(new ChangeListener<Boolean>() {
 			@Override
@@ -41,7 +41,7 @@ public class ConveyorElement implements IGUI {
 		workpiecePosition.addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if(logic.workpieceIsPresent()) {
+				if(conveyorLogic.workpieceIsPresent()) {
 					shape.setPosition(workpiecePosition.get());
 				}
 			}
