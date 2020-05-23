@@ -54,6 +54,18 @@
 				<configuration>
 					<mainClass>gui.FTLabSimulationGUI</mainClass>
 				</configuration>
+				<executions>
+					<execution>
+						<!-- Configuration for debugging -->
+						<id>debug</id>
+						<configuration>
+							<options>
+								<option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+							</options>
+							
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
