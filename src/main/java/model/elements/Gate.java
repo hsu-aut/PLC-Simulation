@@ -1,16 +1,17 @@
 package model.elements;
 
-public class Gate {
+public class Gate extends SimulationUpdateable {
 	
 	private GateDoor leftDoor, rightDoor;
+	private SimulationElementName elementName;
 	
-	
-	public Gate(GateDoor leftDoor, GateDoor rightDoor) {
+	public Gate(SimulationElementName elementName, GateDoor leftDoor, GateDoor rightDoor) {
+		this.elementName = elementName;
 		this.leftDoor = leftDoor;
 		this.rightDoor = rightDoor;
 	}
 	
-	
+	@Override
 	public void update() {
 		this.leftDoor.update();
 		this.rightDoor.update();

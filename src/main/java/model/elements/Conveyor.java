@@ -5,14 +5,14 @@ import model.simulation.FtPlantSimulation;
 /**
  * Special type of a {@link BinaryActuator} that represents a conveyor with a given length and methods to update workpiece position
  */
-public class Conveyor extends LinearMovementElement implements SimulationUpdateable{
+public class Conveyor extends LinearMovementElement {
 
 	private boolean workpiecePresent;
 	private int workpiecePosition = 0;
 
 	private BinaryActuator motorLeft, motorRight;
 
-	public Conveyor(ActuatorDefinition motorLeft, ActuatorDefinition motorRight, FtPlantSimulation simulation, int length) {
+	public Conveyor(SimulationElementName elementName, ActuatorDefinition motorLeft, ActuatorDefinition motorRight, FtPlantSimulation simulation, int length) {
 		super(simulation, length);
 		this.motorLeft = new BinaryActuator(motorLeft, simulation);
 		this.motorRight = new BinaryActuator(motorRight, simulation);
