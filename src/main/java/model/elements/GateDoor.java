@@ -10,10 +10,17 @@ public class GateDoor extends LinearMovementElement {
 
 	private int doorPosition = 0; // 0: closed, length: open
 
-	public GateDoor(FtPlantSimulation simulation, BinaryActuator openDoorActuator, BinaryActuator closeDoorActuator, int length) {
+	/**
+	 * 
+	 * @param simulation
+	 * @param openDoorActuator
+	 * @param closeDoorActuator
+	 * @param length
+	 */
+	public GateDoor(FtPlantSimulation simulation, ActuatorDefinition openDoorActuatorDefinition, ActuatorDefinition closeDoorActuatorDefinition, int length) {
 		super(simulation, length);
-		this.openDoorActuator = openDoorActuator;
-		this.closeDoorActuator = closeDoorActuator;
+		this.openDoorActuator = new BinaryActuator(openDoorActuatorDefinition, simulation);
+		this.closeDoorActuator = new BinaryActuator(closeDoorActuatorDefinition, simulation);
 	}
 
 	public void update() {
