@@ -1,6 +1,12 @@
 package model.elements;
 
-public interface SimulationUpdateable {
+public abstract class SimulationUpdateable {
 
-	public void update();
+	SimulationElementName simulationElementName;
+	
+	public abstract void update();
+	
+	public SimulationElementName getSimulationElementName() {
+		return this.simulationElementName;
+	}
 }

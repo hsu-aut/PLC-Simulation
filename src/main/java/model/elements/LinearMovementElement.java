@@ -2,7 +2,7 @@ package model.elements;
 
 import model.simulation.FtPlantSimulation;
 
-public class LinearMovementElement {
+public abstract class LinearMovementElement extends SimulationUpdateable {
 
 	private final int actuatorVelocity = 20; 	// in mm per sec
 	protected int length;							// in mm
