@@ -13,9 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import gui.Controller;
 import model.elements.ActuatorDefinition;
+import model.elements.BinaryActuator;
 import model.elements.BinarySensor;
 import model.elements.Conveyor;
 import model.elements.SensorDefinition;
+import model.elements.SimulationElementName;
+import model.elements.SimulationUpdateable;
 import model.elements.StorageModule;
 
 /**
@@ -35,7 +38,7 @@ public class FtPlantSimulation {
 
 	// Elements
 	private StorageModule storageModule;
-	private Map<ActuatorDefinition, Conveyor> conveyors = new HashMap<ActuatorDefinition, Conveyor>();
+	private Map<SimulationElementName, SimulationUpdateable> updateables = new HashMap<SimulationElementName, SimulationUpdateable>();
 	private Map<SensorDefinition, BinarySensor> sensors = new HashMap<SensorDefinition, BinarySensor>();
 
 	protected FtPlantSimulation(OpcUaClient client, int updateInterval) {
@@ -57,12 +60,12 @@ public class FtPlantSimulation {
 		return sensors;
 	}
 
-	void addConveyor(ActuatorDefinition actuatorName, Conveyor conveyor) {
-		this.conveyors.put(actuatorName, conveyor);
+	void addUpdateable(SimulationUpdateable updateable) {
+		this.updateables.put(updateable.getSimulationElementName(), updateable);
 	}
 
-	public Map<ActuatorDefinition, Conveyor> getConveyors() {
-		return conveyors;
+	public Map<SimulationElementName, SimulationUpdateable> getConveyors() {
+		return updateables;
 	}
 
 	public OpcUaClient getUaClient() {
@@ -108,8 +111,8 @@ public class FtPlantSimulation {
 		logger.debug("Updating simulation, runtime: " + runtime);
 
 		// Update all conveyor and door states
-		for (Conveyor conv : this.conveyors.values()) {
-			conv.update();
+		for (SimulationUpdateable updateable : this.updateables.values()) {
+			updateable.update();
 		}
 		
 		// Update GUI
@@ -118,7 +121,7 @@ public class FtPlantSimulation {
 		
 		switch (this.wpState) {
 		case AtStorage: {
-			Conveyor conveyor1 = this.conveyors.get(ActuatorDefinition.B1_A01);
+			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
 			if (this.storageModule.isGettingWorkpiece()) {
 				logger.info("Simulation update: Getting workpiece from storage");
@@ -131,8 +134,8 @@ public class FtPlantSimulation {
 			break;
 		}
 		case OnConveyor1: {
-			Conveyor conveyor1 = this.conveyors.get(ActuatorDefinition.B1_A01);
-			Conveyor conveyor2 = this.conveyors.get(ActuatorDefinition.B1_A02);
+			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
+			Conveyor conveyor2 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor2);
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
 
 			// Set sensor to false if workpiece moves out of the detection area
@@ -141,7 +144,7 @@ public class FtPlantSimulation {
 			}
 
 			// Push workpiece to conveyor 2
-			if (conveyor1.getRelativeWorkpiecePosition() == 100 && conveyor1.isOn() && conveyor2.isOn()) {
+			if (conveyor1.getRelativeWorkpiecePosition() == 100 && conveyor1.getMotorLeft().isOn() && conveyor2.getMotorLeft().isOn()) {
 				conveyor1.removeWorkpiece();
 				conveyor2.addWorkpiece();
 				this.wpState = WorkpieceState.OnConveyor2;
@@ -150,8 +153,8 @@ public class FtPlantSimulation {
 			break;
 		}
 		case OnConveyor2: {
-			Conveyor conveyor2 = this.conveyors.get(ActuatorDefinition.B1_A02);
-			Conveyor conveyor3 = this.conveyors.get(ActuatorDefinition.B1_A07);
+			Conveyor conveyor2 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor2);
+			Conveyor conveyor3 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor3);
 			BinarySensor sensorConveyor2 = this.sensors.get(SensorDefinition.B1_S03);
 
 			// switch on sensor if workpiece gets in detection area
@@ -162,7 +165,7 @@ public class FtPlantSimulation {
 			}
 
 			// Push workpiece to conveyor 3
-			if (conveyor2.getRelativeWorkpiecePosition() == 100 && conveyor2.isOn() && conveyor3.isOn()) {
+			if (conveyor2.getRelativeWorkpiecePosition() == 100 && conveyor2.getMotorLeft().isOn() && conveyor3.getMotorLeft().isOn()) {
 				conveyor2.removeWorkpiece();
 				conveyor3.addWorkpiece();
 				this.wpState = WorkpieceState.OnConveyor3;
@@ -171,8 +174,8 @@ public class FtPlantSimulation {
 			break;
 		}
 		case OnConveyor3: {
-			Conveyor conveyor3 = this.conveyors.get(ActuatorDefinition.B1_A07);
-			Conveyor conveyor4 = this.conveyors.get(ActuatorDefinition.B1_A08);
+			Conveyor conveyor3 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor3);
+			Conveyor conveyor4 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor4);
 			BinarySensor sensorConveyor3 = this.sensors.get(SensorDefinition.B1_S07);
 
 			// switch on sensor if workpiece gets in detection area
@@ -183,7 +186,7 @@ public class FtPlantSimulation {
 			}
 
 			// Push workpiece to conveyor 4
-			if (conveyor3.getRelativeWorkpiecePosition() == 100 && conveyor3.isOn() && conveyor4.isOn()) {
+			if (conveyor3.getRelativeWorkpiecePosition() == 100 && conveyor3.getMotorLeft().isOn() && conveyor4.getMotorLeft().isOn()) {
 				conveyor3.removeWorkpiece();
 				conveyor4.addWorkpiece();
 				this.wpState = WorkpieceState.BeginConveyor4;
