@@ -11,7 +11,7 @@ public class TurntableShape {
 	private SensorShape shapeTop, shapeLeft, shapeCenter;
 	private Circle cirC, cirCS, cirH1, cirH2, cirH3, cirH4, cirV1, cirV2, cirV3, cirV4;
 
-	public TurntableShape(Pane pane, double posX, double posY, String lblTop, String lblLeft, String lblCenter) {
+	public TurntableShape(Pane pane, int posX, int posY, String lblTop, String lblLeft, String lblCenter) {
 		Circle circle = new Circle(posX, posY, 80);
 		circle.setFill(ShapeHelper.INACTIVE);
 		circle.setStroke(Color.BLACK);

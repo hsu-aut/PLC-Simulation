@@ -11,7 +11,7 @@ public class SensorShape {
 
 	private Rectangle rec;
 
-	public SensorShape(Pane pane, double posX, double posY, Direction direction, String lblText) {
+	public SensorShape(Pane pane, int posX, int posY, Direction direction, String lblText) {
 		switch (direction) {
 		case North: {
 			Rectangle rectangle = new Rectangle(posX - 5, posY, 10, 20);
