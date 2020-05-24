@@ -51,4 +51,10 @@ public class GateDoor extends LinearMovementElement {
 		}
 		return false;
 	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 }

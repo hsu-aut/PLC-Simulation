@@ -30,4 +30,10 @@ public class Gate extends SimulationUpdateable {
 		return (this.leftDoor.isOpen() && this.rightDoor.isOpen());
 	}
 
+	@Override
+	public void reset() {
+		this.leftDoor.reset();
+		this.rightDoor.reset();
+	}
+
 }
