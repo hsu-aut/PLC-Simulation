@@ -22,8 +22,7 @@ import model.elements.SimulationUpdateable;
 import model.elements.StorageModule;
 
 /**
- * Main simulation class that has a state machine with the different positions a
- * workpiece can have
+ * Main simulation class that has a state machine with the different positions a workpiece can have
  */
 public class FtPlantSimulation {
 
@@ -114,11 +113,11 @@ public class FtPlantSimulation {
 		for (SimulationUpdateable updateable : this.updateables.values()) {
 			updateable.update();
 		}
-		
-		// Update GUI
-		if(controller != null)
-			controller.update();
-		
+
+//		// Update GUI
+//		if (controller != null)
+//			controller.update();
+
 		switch (this.wpState) {
 		case AtStorage: {
 			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
