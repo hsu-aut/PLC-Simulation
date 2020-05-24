@@ -6,11 +6,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class GateShape {
+public class GateDoorShape {
 
 	private Rectangle rec, recOpen, recClosed;
 
-	public GateShape(Pane pane, double posX, double posY, Direction direction, String lblText) {
+	public GateDoorShape(Pane pane, double posX, double posY, Direction direction, String lblText) {
 		// direction to close the gate
 		switch (direction) {
 		case North: {
@@ -61,22 +61,26 @@ public class GateShape {
 		}
 	}
 	
-	public void gateIsOpen() {
+	public void doorIsOpen() {
 		rec.setFill(ShapeHelper.GATE_OPEN);
 		recOpen.setFill(ShapeHelper.ACTIVE);
 		recClosed.setFill(ShapeHelper.INACTIVE);
 	}
 	
-	public void gateIsClosed() {
+	public void doorIsClosed() {
 		rec.setFill(ShapeHelper.GATE_CLOSED);
 		recOpen.setFill(ShapeHelper.INACTIVE);
 		recClosed.setFill(ShapeHelper.ACTIVE);
 	}
 	
-	public void gateIsMoving() {
-		rec.setFill(ShapeHelper.INACTIVE);
+	public void doorIsMoving() {
+		rec.setFill(ShapeHelper.ACTIVE);
 		recOpen.setFill(ShapeHelper.INACTIVE);
 		recClosed.setFill(ShapeHelper.INACTIVE);
+	}
+	
+	public void doorNotMoving() {
+		rec.setFill(ShapeHelper.INACTIVE);
 	}
 
 }
