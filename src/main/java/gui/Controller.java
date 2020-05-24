@@ -88,39 +88,11 @@ public class Controller implements Initializable {
 
 		try {
 			simulation = new SimulationBuilder().build(properties.getProperty("opcUaServerEndpointUrl"),
-					Integer.valueOf(properties.getProperty("updateInterval")));
+					Integer.valueOf(properties.getProperty("updateInterval")), pane);
 			simulation.setController(this);
 
-			// Binding Logic and GUI
-			// Conveyor
-			// TODO B1_A23
-			IGUI element = new ConveyorElement(new ConveyorShape(pane, 20, 235, true),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A16), this);
-			guiElements.add(element);
-
-			// TODO B1_A24
-			element = new ConveyorElement(new ConveyorShape(pane, 235, 20, false),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A16), this);
-			guiElements.add(element);
-
-			element = new ConveyorElement(new ConveyorShape(pane, 360, 235, true),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A08), this);
-			guiElements.add(element);
-
-			element = new ConveyorElement(new ConveyorShape(pane, 530, 235, true),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A07), this);
-			guiElements.add(element);
-
-			element = new ConveyorElement(new ConveyorShape(pane, 700, 235, true),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A02), this);
-			guiElements.add(element);
-
-			element = new ConveyorElement(new ConveyorShape(pane, 870, 235, true),
-					simulation.getConveyors().get(ActuatorDefinition.B1_A01), this);
-			guiElements.add(element);
-
 			// Switch
-			element = new SwitchElement(new SwitchShape(pane, 1010, 230, "B1_S06"),
+			IGUI element = new SwitchElement(new SwitchShape(pane, 1010, 230, "B1_S06"),
 					simulation.getSensors().get(SensorDefinition.B1_S06), this);
 			guiElements.add(element);
 
