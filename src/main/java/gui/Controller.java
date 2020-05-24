@@ -17,7 +17,7 @@ import gui.element.SensorElement;
 import gui.element.SwitchElement;
 import gui.element.TurntableElement;
 import gui.element.shape.ConveyorShape;
-import gui.element.shape.GateShape;
+import gui.element.shape.GateDoorShape;
 import gui.element.shape.SensorShape;
 import gui.element.shape.SwitchShape;
 import gui.element.shape.TurntableShape;
@@ -28,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.elements.ActuatorDefinition;
+import model.elements.BinarySensor;
 import model.elements.SensorDefinition;
 import model.simulation.FtPlantSimulation;
 import model.simulation.SimulationBuilder;
@@ -92,38 +93,38 @@ public class Controller implements Initializable {
 			simulation.setController(this);
 
 			// Switch
-			IGUI element = new SwitchElement(new SwitchShape(pane, 1010, 230, "B1_S06"),
-					simulation.getSensors().get(SensorDefinition.B1_S06), this);
+			SensorDefinition switchSensor = SensorDefinition.B1_S06;
+			IGUI element = new SwitchElement(new SwitchShape(pane, switchSensor.getX(), switchSensor.getY(),switchSensor.getTagName()), simulation.getSensors().get(switchSensor), this);
 			guiElements.add(element);
 
 			// Sensor
-			element = new SensorElement(new SensorShape(pane, 1010, 310, Direction.North, "B1_S02"),
-					simulation.getSensors().get(SensorDefinition.B1_S02), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 780, 230, Direction.South, "B1_S03"),
-					simulation.getSensors().get(SensorDefinition.B1_S03), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 610, 310, Direction.North, "B1_S07"),
-					simulation.getSensors().get(SensorDefinition.B1_S07), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 500, 310, Direction.North, "B1_S08"),
-					simulation.getSensors().get(SensorDefinition.B1_S08), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 470, 230, Direction.South, "B1_S16"),
-					simulation.getSensors().get(SensorDefinition.B1_S16), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 410, 230, Direction.South, "B1_S17"),
-					simulation.getSensors().get(SensorDefinition.B1_S17), this);
-			guiElements.add(element);
-
-			element = new SensorElement(new SensorShape(pane, 380, 310, Direction.North, "B1_S09"),
-					simulation.getSensors().get(SensorDefinition.B1_S09), this);
-			guiElements.add(element);
+//			element = new SensorElement(new SensorShape(pane, 1010, 310, Direction.North, "B1_S02"),
+//					simulation.getSensors().get(SensorDefinition.B1_S02), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 780, 230, Direction.South, "B1_S03"),
+//					simulation.getSensors().get(SensorDefinition.B1_S03), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 610, 310, Direction.North, "B1_S07"),
+//					simulation.getSensors().get(SensorDefinition.B1_S07), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 500, 310, Direction.North, "B1_S08"),
+//					simulation.getSensors().get(SensorDefinition.B1_S08), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 470, 230, Direction.South, "B1_S16"),
+//					simulation.getSensors().get(SensorDefinition.B1_S16), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 410, 230, Direction.South, "B1_S17"),
+//					simulation.getSensors().get(SensorDefinition.B1_S17), this);
+//			guiElements.add(element);
+//
+//			element = new SensorElement(new SensorShape(pane, 380, 310, Direction.North, "B1_S09"),
+//					simulation.getSensors().get(SensorDefinition.B1_S09), this);
+//			guiElements.add(element);
 
 //			// TODO S21
 //			element = new SensorElement(new SensorShape(pane, 310, 190, Direction.East, "B1_S21"),
@@ -136,26 +137,26 @@ public class Controller implements Initializable {
 //			guiElements.add(element);
 
 			// TODO S23
-			element = new SensorElement(new SensorShape(pane, 100, 230, Direction.South, "B1_S23"),
-					simulation.getSensors().get(SensorDefinition.B1_S09), this);
-			guiElements.add(element);
+//			element = new SensorElement(new SensorShape(pane, 100, 230, Direction.South, "B1_S23"),
+//					simulation.getSensors().get(SensorDefinition.B1_S09), this);
+//			guiElements.add(element);
+//
+//			// TODO S24
+//			element = new SensorElement(new SensorShape(pane, 310, 100, Direction.East, "B1_S24"),
+//					simulation.getSensors().get(SensorDefinition.B1_S09), this);
+//			guiElements.add(element);
 
-			// TODO S24
-			element = new SensorElement(new SensorShape(pane, 310, 100, Direction.East, "B1_S24"),
-					simulation.getSensors().get(SensorDefinition.B1_S09), this);
-			guiElements.add(element);
-
-			// Gate
-			// TODO 
-			element = new GateElement(new GateShape(pane, 440, 230, Direction.South, "Gate1"), this,
-					simulation.getSensors().get(SensorDefinition.B1_S02),
-					simulation.getSensors().get(SensorDefinition.B1_S03));
-			guiElements.add(element);
-
-			element = new GateElement(new GateShape(pane, 440, 310, Direction.North, "Gate2"), this,
-					simulation.getSensors().get(SensorDefinition.B1_S02),
-					simulation.getSensors().get(SensorDefinition.B1_S03));
-			guiElements.add(element);
+//			// Gate
+//			// TODO 
+//			element = new GateElement(new GateDoorShape(pane, 440, 230, Direction.South, "Gate1"), this,
+//					simulation.getSensors().get(SensorDefinition.B1_S02),
+//					simulation.getSensors().get(SensorDefinition.B1_S03));
+//			guiElements.add(element);
+//
+//			element = new GateElement(new GateDoorShape(pane, 440, 310, Direction.North, "Gate2"), this,
+//					simulation.getSensors().get(SensorDefinition.B1_S02),
+//					simulation.getSensors().get(SensorDefinition.B1_S03));
+//			guiElements.add(element);
 
 			// Turntable
 			// TODO S20, S21, S22
