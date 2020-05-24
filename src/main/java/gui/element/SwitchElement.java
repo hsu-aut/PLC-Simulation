@@ -22,10 +22,10 @@ public class SwitchElement implements IGUI {
 			public void handle(MouseEvent event) {
 				if (controller.isON()) {
 					if (logic.getState()) {
-						logic.setState(false);
+						logic.deactivate();
 						shape.deactivateSwitch();
 					} else {
-						logic.setState(true);
+						logic.activate();
 						shape.activateSwitch();
 					}
 				}

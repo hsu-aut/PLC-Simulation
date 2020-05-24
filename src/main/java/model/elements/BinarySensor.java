@@ -1,5 +1,6 @@
 package model.elements;
 
+import gui.element.shape.SensorShape;
 import model.simulation.FtPlantSimulation;
 
 /**
@@ -9,9 +10,11 @@ import model.simulation.FtPlantSimulation;
 public class BinarySensor extends BinaryPlantElement {
 	
 	private boolean state;
+	SensorShape shape;
 	
-	public BinarySensor(SensorDefinition sensorName, FtPlantSimulation simulation) {
+	public BinarySensor(SensorDefinition sensorName, SensorShape shape, FtPlantSimulation simulation) {
 		super(sensorName.name(), sensorName.getNodeIdString(), sensorName.getComment(), simulation);
+		this.shape = shape;
 	}
 	
 	/**
@@ -22,11 +25,23 @@ public class BinarySensor extends BinaryPlantElement {
 		return this.state;
 	}
 	
+	public void activate() {
+		this.setState(true);
+		this.shape.activateSensor();
+	}
+	
+	public void deactivate() {
+		this.setState(false);
+		this.shape.deactivateSensor();
+	}
+	
+	
+	
 	/**
 	 * Can be used to change the state of the corresponding variable on the OPC UA server
 	 * @param newState
 	 */
-	public void setState(boolean newState) {
+	private void setState(boolean newState) {
 		// Write only if newState is different from old
 		if (newState != this.state) {
 			logger.info("Writing new state {} to sensor {}", newState, this.getTagName());
