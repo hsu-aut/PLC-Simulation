@@ -10,6 +10,7 @@ public abstract class LinearMovementElement extends SimulationUpdateable {
 	
 	public LinearMovementElement(FtPlantSimulation simulation, int length) {
 
+		this.simulation = simulation;
 		this.length = length;
 		
 		int updateInterval = simulation.getUpdateInterval();
