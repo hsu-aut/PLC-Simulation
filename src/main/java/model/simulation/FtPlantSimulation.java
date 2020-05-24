@@ -127,7 +127,7 @@ public class FtPlantSimulation {
 				this.wpState = WorkpieceState.OnConveyor1;
 				// assumption: workpiece gets always placed on first conveyor so that sensor can
 				// detect it
-				sensorConveyor1.setState(true);
+				sensorConveyor1.activate();
 				conveyor1.addWorkpiece();
 			}
 			break;
@@ -139,7 +139,7 @@ public class FtPlantSimulation {
 
 			// Set sensor to false if workpiece moves out of the detection area
 			if (conveyor1.getRelativeWorkpiecePosition() > 60) {
-				sensorConveyor1.setState(false);
+				sensorConveyor1.deactivate();
 			}
 
 			// Push workpiece to conveyor 2
@@ -158,9 +158,9 @@ public class FtPlantSimulation {
 
 			// switch on sensor if workpiece gets in detection area
 			if (conveyor2.getRelativeWorkpiecePosition() > 40 && conveyor2.getRelativeWorkpiecePosition() < 75) {
-				sensorConveyor2.setState(true);
+				sensorConveyor2.activate();
 			} else {
-				sensorConveyor2.setState(false);
+				sensorConveyor2.deactivate();
 			}
 
 			// Push workpiece to conveyor 3
@@ -179,9 +179,9 @@ public class FtPlantSimulation {
 
 			// switch on sensor if workpiece gets in detection area
 			if (conveyor3.getRelativeWorkpiecePosition() > 40 && conveyor3.getRelativeWorkpiecePosition() < 75) {
-				sensorConveyor3.setState(true);
+				sensorConveyor3.activate();
 			} else {
-				sensorConveyor3.setState(false);
+				sensorConveyor3.deactivate();
 			}
 
 			// Push workpiece to conveyor 4
