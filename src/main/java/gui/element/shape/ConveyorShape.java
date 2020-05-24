@@ -149,7 +149,7 @@ public class ConveyorShape{
 		rec5.setFill(ShapeHelper.INACTIVE);
 	}
 	
-	public void setPosition(float position) {
+	public void setPosition(int position) {
 		resetPosition();
 		if(position <= 20) {
 			rec1.setFill(ShapeHelper.ACTIVE);	
