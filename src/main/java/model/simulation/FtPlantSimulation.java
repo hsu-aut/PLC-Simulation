@@ -1,7 +1,6 @@
 package model.simulation;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gui.Controller;
-import model.elements.ActuatorDefinition;
-import model.elements.BinaryActuator;
 import model.elements.BinarySensor;
 import model.elements.Conveyor;
 import model.elements.Gate;
@@ -22,13 +19,13 @@ import model.elements.SensorDefinition;
 import model.elements.SimulationElementName;
 import model.elements.SimulationUpdateable;
 import model.elements.StorageModule;
+import model.elements.Turntable;
 
 /**
  * Main simulation class that has a state machine with the different positions a workpiece can have
  */
 public class FtPlantSimulation {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private long startTime;
 	private WorkpieceState wpState;
 	private OpcUaClient client;
@@ -124,25 +121,19 @@ public class FtPlantSimulation {
 	 * Update-method that is periodically called to update the simulation state
 	 */
 	public void update() {
-		System.out.println("Updating simulation");
 		long runtime = System.currentTimeMillis() - this.startTime;
-		logger.debug("Updating simulation, runtime: " + runtime);
 
 		// Update all conveyor and door states
 		for (SimulationUpdateable updateable : this.updateables.values()) {
 			updateable.update();
 		}
 
-//		// Update GUI
-//		if (controller != null)
-//			controller.update();
-
 		switch (this.wpState) {
 		case AtStorage: {
 			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
 			if (this.storageModule.isGettingWorkpiece()) {
-				logger.info("Simulation update: Getting workpiece from storage");
+				this.controller.log("Simulation update: Getting workpiece from storage");
 				this.wpState = WorkpieceState.OnConveyor1;
 				// assumption: workpiece gets always placed on first conveyor so that sensor can
 				// detect it
@@ -166,7 +157,7 @@ public class FtPlantSimulation {
 				conveyor1.removeWorkpiece();
 				conveyor2.addWorkpiece();
 				this.wpState = WorkpieceState.OnConveyor2;
-				logger.info("Simulation update: Moving workpiece to conveyor 2");
+				this.controller.log("Simulation update: Moving workpiece to conveyor 2");
 			}
 			break;
 		}
@@ -187,7 +178,7 @@ public class FtPlantSimulation {
 				conveyor2.removeWorkpiece();
 				conveyor3.addWorkpiece();
 				this.wpState = WorkpieceState.OnConveyor3;
-				logger.info("Simulation update: Moving workpiece to conveyor 3");
+				this.controller.log("Simulation update: Moving workpiece to conveyor 3");
 			}
 			break;
 		}
@@ -208,7 +199,7 @@ public class FtPlantSimulation {
 				conveyor3.removeWorkpiece();
 				conveyor4.addWorkpiece();
 				this.wpState = WorkpieceState.BeginConveyor4;
-				logger.info("Simulation update: Moving workpiece to conveyor 4");
+				this.controller.log("Simulation update: Moving workpiece to conveyor 4");
 			}
 			break;
 		}
@@ -224,37 +215,114 @@ public class FtPlantSimulation {
 			} else {
 				b1_s08.deactivate();
 			}
-			
+
 			if (conveyor4.getRelativeWorkpiecePosition() > 25 && conveyor4.getRelativeWorkpiecePosition() < 35) {
 				b1_s16.activate();
 			} else {
 				b1_s16.deactivate();
-			}			
-			
-			if(conveyor4.getRelativeWorkpiecePosition() >= 40 && conveyor4.getMotorLeft().isOn()) {
-				
-				if(gate.isOpen()) {
+			}
+
+			if (conveyor4.getRelativeWorkpiecePosition() >= 40 && conveyor4.getMotorLeft().isOn()) {
+
+				if (gate.isOpen()) {
 					this.controller.log("Transporting Workpiece trough the gate");
 					conveyor4.unblockWorkpiece();
 					this.wpState = WorkpieceState.BehindGate;
 				} else {
-					this.controller.log("WARNING: The workpiece is crashing into the gate");
+					this.controller.warn("The workpiece is crashing into the gate");
 					conveyor4.blockWorkpiece();
+				}
+			}
+
+			break;
+		}
+		case BehindGate: {
+			Conveyor conveyor4 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor4);
+			Turntable turntable = (Turntable) this.updateables.get(SimulationElementName.Turntable);
+			Conveyor conveyorOnTurntable = turntable.getConveyor();
+			BinarySensor b1_s17 = this.sensors.get(SensorDefinition.B1_S17);
+			BinarySensor b1_s09 = this.sensors.get(SensorDefinition.B1_S09);
+
+			if (conveyor4.getRelativeWorkpiecePosition() > 45 && conveyor4.getRelativeWorkpiecePosition() < 60) {
+				b1_s17.activate();
+			} else {
+				b1_s17.deactivate();
+			}
+
+			if (conveyor4.getRelativeWorkpiecePosition() > 85) {
+				b1_s09.activate();
+			}
+
+			if (conveyor4.getMotorLeft().isOn() && conveyor4.getRelativeWorkpiecePosition() == 100) {
+
+				if (turntable.isVertical()) {
+					this.controller.warn("Workpiece is crashing into the Turntable! The turntable is turned vertically.");
+				}
+
+				if (turntable.isHorizontal() && turntable.getConveyor().getMotorLeft().isOn()) {
+					this.controller.log("Moving workpiece onto the turntable");
+					this.wpState = WorkpieceState.OnTurntable;
+					conveyor4.removeWorkpiece();
+					conveyorOnTurntable.addWorkpiece();
 				}
 			}
 			
 			break;
 		}
-		case FrontOfGate:
+		case OnTurntable: {
+			Turntable turntable = (Turntable) this.updateables.get(SimulationElementName.Turntable);
+			Conveyor conveyorOnTurntable = turntable.getConveyor();
+			Conveyor conveyorLeft =  (Conveyor) this.updateables.get(SimulationElementName.ConveyorLeft);
+			Conveyor conveyorTop =  (Conveyor) this.updateables.get(SimulationElementName.ConveyorTop);
+			
+			BinarySensor b1_s20 = this.sensors.get(SensorDefinition.B1_S20);
 
+			if (conveyorOnTurntable.getRelativeWorkpiecePosition() > 45 && conveyorOnTurntable.getRelativeWorkpiecePosition() < 60) {
+				b1_s20.activate();
+			} else {
+				b1_s20.deactivate();
+			}
+			
+			if(conveyorOnTurntable.getRelativeWorkpiecePosition() == 100 && conveyorOnTurntable.getMotorLeft().isOn()) {
+				
+				if(turntable.isHorizontal() && conveyorLeft.getMotorLeft().isOn()) {
+					this.controller.log("Moving workpiece to left conveyor");
+					this.wpState = WorkpieceState.OnLeftConveyor;
+					conveyorOnTurntable.removeWorkpiece();
+					conveyorLeft.addWorkpiece();
+				}
+				if(turntable.isVertical() && conveyorLeft.getMotorLeft().isOn()) {
+					this.controller.log("Moving workpiece to upper conveyor");
+					this.wpState = WorkpieceState.OnUpperConveyor;
+					conveyorOnTurntable.removeWorkpiece();
+					conveyorTop.addWorkpiece();
+				}
+			}
+			
 			break;
-		case BehindGate:
+		}
+		case OnLeftConveyor: {
+			Conveyor conveyorLeft =  (Conveyor) this.updateables.get(SimulationElementName.ConveyorLeft);
+			BinarySensor b1_s23 = this.sensors.get(SensorDefinition.B1_S23);
 
+			if (conveyorLeft.getRelativeWorkpiecePosition() > 45 && conveyorLeft.getRelativeWorkpiecePosition() < 60) {
+				b1_s23.activate();
+			} else {
+				b1_s23.deactivate();
+			}
 			break;
-		case EndConveyor4:
+		}
+		case OnUpperConveyor: {
+			Conveyor conveyorTop =  (Conveyor) this.updateables.get(SimulationElementName.ConveyorTop);
+			BinarySensor b1_s24 = this.sensors.get(SensorDefinition.B1_S24);
 
+			if (conveyorTop.getRelativeWorkpiecePosition() > 45 && conveyorTop.getRelativeWorkpiecePosition() < 60) {
+				b1_s24.activate();
+			} else {
+				b1_s24.deactivate();
+			}
 			break;
-
+		}
 		}
 	}
 

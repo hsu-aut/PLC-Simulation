@@ -7,6 +7,8 @@ import java.util.concurrent.CompletableFuture;
 
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 
+import com.sun.prism.paint.Color;
+
 import gui.Controller;
 import gui.element.Direction;
 import gui.element.shape.ConveyorShape;
@@ -14,6 +16,8 @@ import gui.element.shape.GateDoorShape;
 import gui.element.shape.SensorShape;
 import gui.element.shape.SwitchShape;
 import gui.element.shape.TurntableShape;
+import javafx.scene.Group;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import model.UaClientUtil;
 import model.elements.ActuatorDefinition;
@@ -42,15 +46,16 @@ public class SimulationBuilder {
 	private Controller guiController;
 	private Pane pane;
 	
-	public SimulationBuilder(Controller guiController, Pane pane) {
+	public SimulationBuilder(Controller guiController) {
 		this.guiController = guiController;
-		this.pane = pane;
+		this.pane = guiController.getPane();
 	}
 
 	public FtPlantSimulation build(String opcUaServerEndpointUrl, int updateInterval) throws Exception {
 		OpcUaClient client = UaClientUtil.createClient(opcUaServerEndpointUrl);
 		client.connect().get();
 		this.simulation = new FtPlantSimulation(client, updateInterval);
+		this.simulation.setController(this.guiController);
 		addSimulationElements();
 		return simulation;
 	}
@@ -86,11 +91,11 @@ public class SimulationBuilder {
 				ActuatorDefinition.NULL, simulation, 150);
 		this.simulation.addUpdateable(conveyor4);
 
-		Conveyor conveyor5 = new Conveyor(SimulationElementName.Conveyor5, new ConveyorShape(pane, 20, 235, true), ActuatorDefinition.B1_A23,
+		Conveyor conveyor5 = new Conveyor(SimulationElementName.ConveyorLeft, new ConveyorShape(pane, 20, 235, true), ActuatorDefinition.B1_A23,
 				ActuatorDefinition.NULL, simulation, 150);
 		this.simulation.addUpdateable(conveyor5);
 
-		Conveyor conveyor6 = new Conveyor(SimulationElementName.Conveyor6, new ConveyorShape(pane, 235, 20, false), ActuatorDefinition.B1_A24,
+		Conveyor conveyor6 = new Conveyor(SimulationElementName.ConveyorTop, new ConveyorShape(pane, 235, 20, false), ActuatorDefinition.B1_A24,
 				ActuatorDefinition.NULL, simulation, 150);
 		this.simulation.addUpdateable(conveyor6);
 
@@ -116,7 +121,16 @@ public class SimulationBuilder {
 		BinarySensor horizontalSensor = new BinarySensor(SensorDefinition.B1_S22, new SensorShape(pane, 200, 340, Direction.North, "B1_S22"), simulation);
 		BinarySensor verticalSensor = new BinarySensor(SensorDefinition.B1_S21, new SensorShape(pane, 330, 190, Direction.East, "B1_S21"), simulation);
 
-		Turntable turntable = new Turntable(SimulationElementName.Turntable, simulation, new TurntableShape(pane, 270, 271, "B1_S20"), ActuatorDefinition.B1_A22, ActuatorDefinition.B1_A21, horizontalSensor, verticalSensor, 80);
+		
+		Pane turntablePane = new Pane();
+		turntablePane.setLayoutX(190);
+		turntablePane.setLayoutY(190);
+		Turntable turntable = new Turntable(SimulationElementName.Turntable, simulation, new TurntableShape(turntablePane, 0, 0, "B1_S20"), ActuatorDefinition.B1_A22, ActuatorDefinition.B1_A21, horizontalSensor, verticalSensor, 80, ActuatorDefinition.B1_A20, ActuatorDefinition.NULL);
+		pane.getChildren().add(turntablePane);
+		
+		BinarySensor turntableConveyorSensor = new BinarySensor(SensorDefinition.B1_S20, new SensorShape(turntablePane, 80, 60, Direction.North, "B1_S20"), simulation);
+		this.simulation.addSensor(SensorDefinition.B1_S20, turntableConveyorSensor);
+		
 		this.simulation.addUpdateable(turntable);
 
 	}
