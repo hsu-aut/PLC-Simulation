@@ -3,18 +3,11 @@ package model.elements;
 public class Gate extends SimulationUpdateable {
 	
 	private GateDoor leftDoor, rightDoor;
-	private SimulationElementName elementName;
 	
 	public Gate(SimulationElementName elementName, GateDoor leftDoor, GateDoor rightDoor) {
-		this.elementName = elementName;
+		this.simulationElementName = elementName;
 		this.leftDoor = leftDoor;
 		this.rightDoor = rightDoor;
-	}
-	
-	@Override
-	public void update() {
-		this.leftDoor.update();
-		this.rightDoor.update();
 	}
 	
 	
@@ -26,10 +19,17 @@ public class Gate extends SimulationUpdateable {
 		return this.rightDoor.getPosition();
 	}
 	
-	boolean isOpen() {
+	public boolean isOpen() {
 		return (this.leftDoor.isOpen() && this.rightDoor.isOpen());
 	}
 
+	
+	@Override
+	public void update() {
+		this.leftDoor.update();
+		this.rightDoor.update();
+	}
+	
 	@Override
 	public void reset() {
 		this.leftDoor.reset();
