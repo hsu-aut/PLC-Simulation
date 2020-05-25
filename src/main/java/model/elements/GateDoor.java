@@ -8,14 +8,14 @@ import javafx.beans.value.ObservableValue;
 import model.simulation.FtPlantSimulation;
 import model.simulation.SimulationBuilder;
 
-public class GateDoor extends LinearMovementElement {
+public class GateDoor extends MovingElement {
 
 	private BinaryActuator openDoorActuator, closeDoorActuator;
 	private BinarySensor sensorOpen, sensorClosed;
 
 	private GateDoorShape shape;
 
-	private int doorPosition = 0; // 0: closed, length: open
+	private int doorPosition = 0; // 0: closed, distance: open
 
 	/**
 	 * 
@@ -32,6 +32,7 @@ public class GateDoor extends LinearMovementElement {
 		this.closeDoorActuator = new BinaryActuator(closeActuator, simulation);
 		this.sensorOpen = sensorOpen;
 		this.sensorClosed = sensorClosed;
+		this.sensorClosed.activate();
 	}
 
 	public void update() {
@@ -45,29 +46,30 @@ public class GateDoor extends LinearMovementElement {
 			this.shape.doorIsMoving();
 			this.closeDoor();
 		}
-
-//		stateOpenSensor.set(sensorOpen.getState());
-//		stateCloseSensor.set(sensorClosed.getState());
 	}
 
 	
 	private void openDoor() {
-		this.doorPosition = Math.min(this.length, this.doorPosition + this.stepSize);
-		if (this.doorPosition == this.length) {
+		// as soon is door is opening, deactivate closed sensor
+		this.sensorClosed.deactivate();
+		this.doorPosition = Math.min(this.distance, this.doorPosition + this.stepSize);
+		if (this.doorPosition == this.distance) {
 			this.shape.doorIsOpen();
-			this.sensorOpen.writeBooleanNode(true);
+			this.sensorOpen.activate();
 		} else {
-			this.sensorOpen.writeBooleanNode(false);
+			this.sensorOpen.deactivate();
 		}
 	}
 
 	private void closeDoor() {
+		// as soon is door is closing, deactivate open sensor
+		this.sensorOpen.deactivate();
 		this.doorPosition = Math.max(0, this.doorPosition - this.stepSize);
 		if (this.doorPosition == 0) {
 			this.shape.doorIsClosed();
-			this.sensorClosed.writeBooleanNode(true);
+			this.sensorClosed.activate();
 		} else {
-			this.sensorClosed.writeBooleanNode(false);
+			this.sensorClosed.deactivate();
 		}
 	}
 
@@ -76,7 +78,7 @@ public class GateDoor extends LinearMovementElement {
 	}
 
 	boolean isOpen() {
-		if (this.doorPosition == this.length) {
+		if (this.doorPosition == this.distance) {
 			return true;
 		}
 		return false;
@@ -85,8 +87,8 @@ public class GateDoor extends LinearMovementElement {
 	@Override
 	public void reset() {
 		this.doorPosition = 0;
-		this.sensorClosed.writeBooleanNode(true);
-		this.sensorOpen.writeBooleanNode(true);
+		this.sensorClosed.activate();
+		this.sensorOpen.deactivate();
 		shape.doorNotMoving();
 	}
 }
