@@ -3,33 +3,17 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import gui.element.ConveyorElement;
-import gui.element.Direction;
-import gui.element.GateElement;
-import gui.element.IGUI;
-import gui.element.SensorElement;
-import gui.element.SwitchElement;
-import gui.element.TurntableElement;
-import gui.element.shape.ConveyorShape;
-import gui.element.shape.GateDoorShape;
-import gui.element.shape.SensorShape;
-import gui.element.shape.SwitchShape;
-import gui.element.shape.TurntableShape;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import model.elements.ActuatorDefinition;
-import model.elements.BinarySensor;
-import model.elements.SensorDefinition;
 import model.simulation.FtPlantSimulation;
 import model.simulation.SimulationBuilder;
 
@@ -46,7 +30,6 @@ public class Controller implements Initializable {
 	private Properties properties = new Properties();
 	private FtPlantSimulation simulation;
 	private boolean isON = false;
-	private List<IGUI> guiElements = new ArrayList<IGUI>();
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
@@ -54,7 +37,7 @@ public class Controller implements Initializable {
 			System.out.println(properties);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logConsole(e.getMessage());
+			log(e.getMessage());
 		}
 	}
 
@@ -62,28 +45,40 @@ public class Controller implements Initializable {
 	private void btnStart_oA() {
 		if (btnStart.getText().equals("Start")) {
 			btnStart.setText("Stop");
-			logConsole("Start Simulation");
+			log("Start Simulation");
 			simulation.run();
 			isON = true;
 		} else {
 			btnStart.setText("Start");
-			logConsole("Stop Simulation");
+			log("Stop Simulation");
 			simulation.stop();
 			isON = false;
 		}
 	}
-	
+
 	@FXML
 	private void btnReset_oA() {
 		reset();
 	}
 
-	public void logConsole(String msg) {
+	private void printMessage(String msg, Color color) {
 		Date date = new Date();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		tAConsole.setStyle("-fx-text-fill: " + color);
 		tAConsole.appendText("[" + df.format(date) + "] " + msg + "\n");
 	}
 
+	
+	public void log(String msg) {
+		this.printMessage(msg, Color.BLACK);
+	}
+
+	
+	public void warn(String msg) {
+		this.printMessage(msg, Color.RED);
+	}
+
+	
 	public void setStage(Stage stage) {
 //		this.primaryStage = stage;
 
@@ -111,17 +106,11 @@ public class Controller implements Initializable {
 		return isON;
 	}
 
-	public void update() {
-		for (IGUI element : guiElements) {
-			element.update();
-		}
-	}
-	
 	public void reset() {
-		if(!simulation.isRunning()) {
+		if (!simulation.isRunning()) {
 			simulation.reset();
 		} else {
-			this.logConsole("The simulation has to be stopped before it can be resetted.");
+			this.log("The simulation has to be stopped before it can be resetted.");
 		}
 	}
 
