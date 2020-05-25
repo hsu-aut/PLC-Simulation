@@ -113,4 +113,9 @@ public class Conveyor extends MovingElement {
 		this.shape.deactivateRight();
 	}
 
+	
+	public ConveyorShape getShape() {
+		return this.shape;
+	}
+	
 }
