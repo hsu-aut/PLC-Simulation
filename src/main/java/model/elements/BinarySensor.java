@@ -1,5 +1,6 @@
 package model.elements;
 
+import gui.element.shape.BinaryShape;
 import gui.element.shape.SensorShape;
 import model.simulation.FtPlantSimulation;
 
@@ -10,9 +11,9 @@ import model.simulation.FtPlantSimulation;
 public class BinarySensor extends BinaryPlantElement {
 	
 	private boolean state;
-	SensorShape shape;
+	BinaryShape shape;
 	
-	public BinarySensor(SensorDefinition sensorName, SensorShape shape, FtPlantSimulation simulation) {
+	public BinarySensor(SensorDefinition sensorName, BinaryShape shape, FtPlantSimulation simulation) {
 		super(sensorName.name(), sensorName.getNodeIdString(), sensorName.getComment(), simulation);
 		this.shape = shape;
 	}
@@ -27,12 +28,12 @@ public class BinarySensor extends BinaryPlantElement {
 	
 	public void activate() {
 		this.setState(true);
-		this.shape.activateSensor();
+		this.shape.activateShape();
 	}
 	
 	public void deactivate() {
 		this.setState(false);
-		this.shape.deactivateSensor();
+		this.shape.deactivateShape();
 	}
 	
 	
@@ -51,6 +52,11 @@ public class BinarySensor extends BinaryPlantElement {
 				this.state = newState;
 			}
 		}
+	}
+	
+	public void reset() {
+		System.out.println("resetting sensors");
+		this.deactivate();
 	}
 
 }
