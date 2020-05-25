@@ -1,6 +1,5 @@
 package gui.element.shape;
 
-import gui.element.ShapeHelper;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
@@ -10,6 +9,8 @@ public class ConveyorShape{
 	
 	private Rectangle rec1, rec2, rec3, rec4, rec5;
 	private Polyline left1, left2, left3, left4, right1, right2, right3, right4;
+	
+	private int length;
 	
 	public ConveyorShape(Pane pane, double posX, double posY, boolean horizontal) {
 		if(horizontal) {
@@ -149,19 +150,24 @@ public class ConveyorShape{
 		rec5.setFill(ShapeHelper.INACTIVE);
 	}
 	
-	public void setPosition(int position) {
+	public void setRelativePosition(float relativePosition) {
 		resetPosition();
-		if(position <= 20) {
+		if(relativePosition > 0 && relativePosition <= 20) {
 			rec1.setFill(ShapeHelper.ACTIVE);	
-		}else if(position <= 40) {
+		}else if(relativePosition <= 40) {
 			rec2.setFill(ShapeHelper.ACTIVE);
-		}else if(position <= 60) {
+		}else if(relativePosition <= 60) {
 			rec3.setFill(ShapeHelper.ACTIVE);
-		}else if(position <= 80) {
+		}else if(relativePosition <= 80) {
 			rec4.setFill(ShapeHelper.ACTIVE);
 		}else {
 			rec5.setFill(ShapeHelper.ACTIVE);
 		}
+	}
+	
+	// TODO: Not good, should be set via constructor (resulting changes: pane should be in simulation, passing only coordinates and type to conveyor)
+	public void setLength(int length) {
+		this.length = length;
 	}
 	
 }
