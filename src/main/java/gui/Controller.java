@@ -7,12 +7,14 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import model.simulation.FtPlantSimulation;
 import model.simulation.SimulationBuilder;
@@ -22,7 +24,7 @@ public class Controller implements Initializable {
 	@FXML
 	private Button btnStart;
 	@FXML
-	private TextArea tAConsole;
+	private TextFlow tAConsole;
 	@FXML
 	private Pane pane;
 
@@ -55,27 +57,35 @@ public class Controller implements Initializable {
 			isON = false;
 		}
 	}
+	
 
 	@FXML
 	private void btnReset_oA() {
 		reset();
 	}
 
-	private void printMessage(String msg, Color color) {
-		Date date = new Date();
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		tAConsole.setStyle("-fx-text-fill: " + color);
-		tAConsole.appendText("[" + df.format(date) + "] " + msg + "\n");
+	private void printMessage(String type, String msg, Color color) {
+		
+		Platform.runLater(() -> {
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String completeMsg = "[" + df.format(date) + "] " + type + " : " + msg + "\n";
+			
+			Text text = new Text(completeMsg);
+			text.setFill(color);
+			tAConsole.getChildren().add(text);
+		});
+		
 	}
 
 	
 	public void log(String msg) {
-		this.printMessage(msg, Color.BLACK);
+		this.printMessage("INFO", msg, Color.BLACK);
 	}
 
 	
 	public void warn(String msg) {
-		this.printMessage(msg, Color.RED);
+		this.printMessage("WARNING", msg, Color.RED);
 	}
 
 	
@@ -83,9 +93,8 @@ public class Controller implements Initializable {
 //		this.primaryStage = stage;
 
 		try {
-			simulation = new SimulationBuilder(this, pane).build(properties.getProperty("opcUaServerEndpointUrl"),
+			simulation = new SimulationBuilder(this).build(properties.getProperty("opcUaServerEndpointUrl"),
 					Integer.valueOf(properties.getProperty("updateInterval")));
-			simulation.setController(this);
 
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -106,6 +115,10 @@ public class Controller implements Initializable {
 		return isON;
 	}
 
+	public Pane getPane() {
+		return this.pane;
+	}
+	
 	public void reset() {
 		if (!simulation.isRunning()) {
 			simulation.reset();
