@@ -1,6 +1,7 @@
 package model.simulation;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,6 +17,7 @@ import model.elements.ActuatorDefinition;
 import model.elements.BinaryActuator;
 import model.elements.BinarySensor;
 import model.elements.Conveyor;
+import model.elements.Gate;
 import model.elements.SensorDefinition;
 import model.elements.SimulationElementName;
 import model.elements.SimulationUpdateable;
@@ -34,6 +36,7 @@ public class FtPlantSimulation {
 	private Controller controller;
 
 	private ScheduledFuture<?> future;
+	private boolean running = false;
 
 	// Elements
 	private StorageModule storageModule;
@@ -92,6 +95,7 @@ public class FtPlantSimulation {
 		// Runs the simulation by creating a new Runnable that is periodically executed
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		this.future = executor.scheduleAtFixedRate(simulationRunnable, 0, this.updateInterval, TimeUnit.MILLISECONDS);
+		this.running = true;
 	}
 
 	/**
@@ -99,6 +103,21 @@ public class FtPlantSimulation {
 	 */
 	public void stop() {
 		this.future.cancel(true);
+		this.running = false;
+	}
+
+	public void reset() {
+		this.wpState = WorkpieceState.AtStorage;
+		for (BinarySensor sensor : this.sensors.values()) {
+			sensor.reset();
+		}
+		for (SimulationUpdateable updateable : this.updateables.values()) {
+			updateable.reset();
+		}
+	}
+
+	public boolean isRunning() {
+		return this.running;
 	}
 
 	/**
@@ -138,7 +157,7 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
 
 			// Set sensor to false if workpiece moves out of the detection area
-			if (conveyor1.getRelativeWorkpiecePosition() > 60) {
+			if (conveyor1.getRelativeWorkpiecePosition() > 40) {
 				sensorConveyor1.deactivate();
 			}
 
@@ -157,7 +176,7 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor2 = this.sensors.get(SensorDefinition.B1_S03);
 
 			// switch on sensor if workpiece gets in detection area
-			if (conveyor2.getRelativeWorkpiecePosition() > 40 && conveyor2.getRelativeWorkpiecePosition() < 75) {
+			if (conveyor2.getRelativeWorkpiecePosition() > 40 && conveyor2.getRelativeWorkpiecePosition() < 60) {
 				sensorConveyor2.activate();
 			} else {
 				sensorConveyor2.deactivate();
@@ -178,7 +197,7 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor3 = this.sensors.get(SensorDefinition.B1_S07);
 
 			// switch on sensor if workpiece gets in detection area
-			if (conveyor3.getRelativeWorkpiecePosition() > 40 && conveyor3.getRelativeWorkpiecePosition() < 75) {
+			if (conveyor3.getRelativeWorkpiecePosition() > 40 && conveyor3.getRelativeWorkpiecePosition() < 60) {
 				sensorConveyor3.activate();
 			} else {
 				sensorConveyor3.deactivate();
@@ -193,9 +212,39 @@ public class FtPlantSimulation {
 			}
 			break;
 		}
-		case BeginConveyor4:
+		case BeginConveyor4: {
+			Conveyor conveyor4 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor4);
+			BinarySensor b1_s08 = this.sensors.get(SensorDefinition.B1_S08);
+			BinarySensor b1_s16 = this.sensors.get(SensorDefinition.B1_S16);
+			Gate gate = (Gate) this.updateables.get(SimulationElementName.Gate);
 
+			// switch on sensor if workpiece gets in detection area
+			if (conveyor4.getRelativeWorkpiecePosition() > 8 && conveyor4.getRelativeWorkpiecePosition() < 15) {
+				b1_s08.activate();
+			} else {
+				b1_s08.deactivate();
+			}
+			
+			if (conveyor4.getRelativeWorkpiecePosition() > 25 && conveyor4.getRelativeWorkpiecePosition() < 35) {
+				b1_s16.activate();
+			} else {
+				b1_s16.deactivate();
+			}			
+			
+			if(conveyor4.getRelativeWorkpiecePosition() >= 40 && conveyor4.getMotorLeft().isOn()) {
+				
+				if(gate.isOpen()) {
+					this.controller.log("Transporting Workpiece trough the gate");
+					conveyor4.unblockWorkpiece();
+					this.wpState = WorkpieceState.BehindGate;
+				} else {
+					this.controller.log("WARNING: The workpiece is crashing into the gate");
+					conveyor4.blockWorkpiece();
+				}
+			}
+			
 			break;
+		}
 		case FrontOfGate:
 
 			break;
