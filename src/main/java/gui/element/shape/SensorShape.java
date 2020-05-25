@@ -1,86 +1,78 @@
 package gui.element.shape;
 
 import gui.element.Direction;
-import gui.element.ShapeHelper;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class SensorShape {
+public class SensorShape extends BinaryShape {
 
-	private Rectangle rec;
-
-	public SensorShape(Pane pane, int posX, int posY, Direction direction, String lblText) {
+	public SensorShape(Pane pane, double posX, double posY, Direction direction, String lblText) {
+		Rectangle rectangle;
+		Label lbl = new Label(lblText);
+		
 		switch (direction) {
 		case North: {
-			Rectangle rectangle = new Rectangle(posX - 5, posY, 10, 20);
-			rectangle.setFill(ShapeHelper.SENSOR_FRONT);
-			rectangle.setStroke(Color.BLACK);
-			pane.getChildren().add(rectangle);
-
+			rectangle = new Rectangle(posX - 5, posY, 10, 20);
 			rec = new Rectangle(posX - 10, posY + 20, 20, 20);
-			rec.setFill(ShapeHelper.INACTIVE);
-			rec.setStroke(Color.BLACK);
-			pane.getChildren().add(rec);
 
-			Label lbl = new Label(lblText);
 			lbl.setLayoutX(posX - 20);
 			lbl.setLayoutY(posY + 45);
-			lbl.setStyle("-fx-font-weight: bold");
-			pane.getChildren().add(lbl);
 			break;
 		}
 		case West: {
+			rectangle = new Rectangle(posX+20, posY - 5, 20, 10);
+			rec = new Rectangle(posX + 40, posY - 10, 20, 20);
 
+			lbl.setLayoutX(posX + 70);
+			lbl.setLayoutY(posY - 10);
 			break;
 		}
 		case South: {
-			Rectangle rectangle = new Rectangle(posX - 5, posY - 20, 10, 20);
-			rectangle.setFill(ShapeHelper.SENSOR_FRONT);
-			rectangle.setStroke(Color.BLACK);
-			pane.getChildren().add(rectangle);
-
+			rectangle = new Rectangle(posX - 5, posY - 20, 10, 20);
 			rec = new Rectangle(posX - 10, posY - 40, 20, 20);
-			rec.setFill(ShapeHelper.INACTIVE);
-			rec.setStroke(Color.BLACK);
-			pane.getChildren().add(rec);
 
-			Label lbl = new Label(lblText);
 			lbl.setLayoutX(posX - 20);
 			lbl.setLayoutY(posY - 60);
-			lbl.setStyle("-fx-font-weight: bold");
-			pane.getChildren().add(lbl);
 			break;
 		}
 		case East: {
-			Rectangle rectangle = new Rectangle(posX, posY - 5, 20, 10);
-			rectangle.setFill(ShapeHelper.SENSOR_FRONT);
-			rectangle.setStroke(Color.BLACK);
-			pane.getChildren().add(rectangle);
-
+			rectangle = new Rectangle(posX, posY - 5, 20, 10);
 			rec = new Rectangle(posX + 20, posY - 10, 20, 20);
-			rec.setFill(ShapeHelper.INACTIVE);
-			rec.setStroke(Color.BLACK);
-			pane.getChildren().add(rec);
 
-			Label lbl = new Label(lblText);
 			lbl.setLayoutX(posX + 45);
 			lbl.setLayoutY(posY - 10);
-			lbl.setStyle("-fx-font-weight: bold");
-			pane.getChildren().add(lbl);
+			break;
+		}
+		case None: {
+			rectangle = new Rectangle(posX, posY, 10, 10);
+			rec = new Rectangle(posX, posY, 10, 10);
+			lbl.setLayoutX(posX + 20);
+			lbl.setLayoutY(posY - 5);
 			break;
 		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + direction);
 		}
+		
+		rectangle.setFill(ShapeHelper.SENSOR_FRONT);
+		rectangle.setStroke(Color.BLACK);
+		pane.getChildren().add(rectangle);
+		rec.setFill(ShapeHelper.INACTIVE);
+		rec.setStroke(Color.BLACK);
+		pane.getChildren().add(rec);
+		lbl.setStyle("-fx-font-weight: bold");
+		pane.getChildren().add(lbl);
 	}
 
-	public void activateSensor() {
+	@Override
+	public void activateShape() {
 		rec.setFill(ShapeHelper.ACTIVE);
 	}
 
-	public void deactivateSensor() {
+	@Override
+	public void deactivateShape() {
 		rec.setFill(ShapeHelper.INACTIVE);
 	}
 
