@@ -45,7 +45,7 @@ public class BinaryPlantElement {
 	 * @param value Value to write to the corresponding node
 	 * @return
 	 */
-	public boolean writeBooleanNode(boolean value) {
+	boolean writeBooleanNode(boolean value) {
 		try {
 			return UaClientUtil.writeBooleanNode(simulation.getUaClient(), this.nodeId, value);
 		} catch (InterruptedException | ExecutionException e) {
