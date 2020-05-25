@@ -1,15 +1,12 @@
 package gui.element.shape;
 
-import gui.element.ShapeHelper;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 
-public class SwitchShape {
-
-	private Rectangle rec;
+public class SwitchShape extends BinaryShape {
 
 	public SwitchShape(Pane pane, double posX, double posY, String lblText) {
 		rec = new Rectangle(posX - 10, posY - 20, 20, 20);
@@ -29,16 +26,14 @@ public class SwitchShape {
 		pane.getChildren().add(lbl);
 	}
 
-	public void activateSwitch() {
+	@Override
+	public void activateShape() {
 		rec.setFill(ShapeHelper.ACTIVE);
 	}
 
-	public void deactivateSwitch() {
+	@Override
+	public void deactivateShape() {
 		rec.setFill(ShapeHelper.INACTIVE);
-	}
-
-	public Rectangle getRec() {
-		return rec;
 	}
 
 }

@@ -1,24 +1,20 @@
 package gui.element.shape;
 
 import gui.element.Direction;
-import gui.element.ShapeHelper;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class TurntableShape {
 
-	private SensorShape shapeTop, shapeLeft, shapeCenter;
+	private SensorShape shapeCenter;
 	private Circle cirC, cirCS, cirH1, cirH2, cirH3, cirH4, cirV1, cirV2, cirV3, cirV4;
 
-	public TurntableShape(Pane pane, int posX, int posY, String lblTop, String lblLeft, String lblCenter) {
+	public TurntableShape(Pane pane, int posX, int posY, String lblCenter) {
 		Circle circle = new Circle(posX, posY, 80);
 		circle.setFill(ShapeHelper.INACTIVE);
 		circle.setStroke(Color.BLACK);
 		pane.getChildren().add(circle);
-
-		shapeTop = new SensorShape(pane, posX + 40, posY - 80, Direction.East, lblTop);
-		shapeLeft = new SensorShape(pane, posX - 80, posY + 40, Direction.North, lblLeft);
 
 		cirCS = new Circle(posX, posY, 15);
 		cirCS.setFill(ShapeHelper.INACTIVE);
@@ -83,14 +79,6 @@ public class TurntableShape {
 		cirV2.setStroke(ShapeHelper.INACTIVE);
 		cirV3.setStroke(ShapeHelper.INACTIVE);
 		cirV4.setStroke(ShapeHelper.INACTIVE);
-	}
-
-	public SensorShape getShapeTop() {
-		return shapeTop;
-	}
-
-	public SensorShape getShapeLeft() {
-		return shapeLeft;
 	}
 
 	public void activateCenter() {
