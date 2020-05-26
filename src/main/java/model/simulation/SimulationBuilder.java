@@ -128,7 +128,7 @@ public class SimulationBuilder {
 		Turntable turntable = new Turntable(SimulationElementName.Turntable, simulation, new TurntableShape(turntablePane, 0, 0, "B1_S20"), ActuatorDefinition.B1_A22, ActuatorDefinition.B1_A21, horizontalSensor, verticalSensor, 80, ActuatorDefinition.B1_A20, ActuatorDefinition.NULL);
 		pane.getChildren().add(turntablePane);
 		
-		BinarySensor turntableConveyorSensor = new BinarySensor(SensorDefinition.B1_S20, new SensorShape(turntablePane, 80, 60, Direction.North, "B1_S20"), simulation);
+		BinarySensor turntableConveyorSensor = new BinarySensor(SensorDefinition.B1_S20, new SensorShape(turntablePane, 80, 100, Direction.North, "B1_S20"), simulation);
 		this.simulation.addSensor(SensorDefinition.B1_S20, turntableConveyorSensor);
 		
 		this.simulation.addUpdateable(turntable);
