@@ -26,9 +26,9 @@
       </ToolBar>
       <VBox VBox.vgrow="ALWAYS">
          <children>
-      				<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      				<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="NEVER">
                <content>
-                  <Pane fx:id="pane" minHeight="385.0" minWidth="900.0" prefWidth="893.0" />
+                  <Pane fx:id="pane" minHeight="400.0" minWidth="900.0" prefHeight="400.0" prefWidth="1072.0" />
                </content>
             </ScrollPane>
             <TextFlow fx:id="tAConsole" maxHeight="1.7976931348623157E308" prefHeight="215.0" prefWidth="1074.0" />
