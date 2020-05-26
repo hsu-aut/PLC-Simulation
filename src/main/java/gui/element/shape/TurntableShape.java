@@ -20,11 +20,11 @@ public class TurntableShape {
 	}
 
 	public void conVertical() {
-		this.conveyorPane.setRotate(90);
+		this.pane.setRotate(90);
 	}
 
 	public void conHorizontal() {
-		this.conveyorPane.setRotate(0);
+		this.pane.setRotate(0);
 	}
 
 	

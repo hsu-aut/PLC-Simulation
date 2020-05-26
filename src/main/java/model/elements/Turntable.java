@@ -5,7 +5,6 @@ import gui.element.shape.TurntableShape;
 import javafx.scene.layout.Pane;
 import model.simulation.FtPlantSimulation;
 
-//TODO: Turntable and GateDoor are very similar, should be handled in one class
 
 public class Turntable extends MovingElement {
 
@@ -31,7 +30,7 @@ public class Turntable extends MovingElement {
 		this.shape = shape;
 		Pane conveyorPane = new Pane();
 		int conveyorLength = (int) ((float) 0.8 * diameter);
-		this.conveyor = new Conveyor(SimulationElementName.ConveyorOnTurntable, new ConveyorShape(conveyorPane, 0, 50, true), actuatorConveyorLeft, actuatorConveyorRight, simulation, conveyorLength);
+		this.conveyor = new Conveyor(SimulationElementName.ConveyorOnTurntable, new ConveyorShape(conveyorPane, 0, 45, true), actuatorConveyorLeft, actuatorConveyorRight, simulation, conveyorLength);
 		this.shape.addConveyorPane(conveyorPane);
 		this.turnClockwise = new BinaryActuator(turnClockwise, simulation);
 		this.turnCounterClockwise = new BinaryActuator(turnCounterClockwise, simulation);
@@ -57,6 +56,7 @@ public class Turntable extends MovingElement {
 
 	
 	private void turnClockwise() {
+		this.sensorHorizontal.deactivate();
 		this.turntablePosition = Math.min(this.distance, this.turntablePosition + this.stepSize);
 		if (this.turntablePosition == this.distance) {
 			this.shape.conVertical();
@@ -67,6 +67,7 @@ public class Turntable extends MovingElement {
 	}
 
 	private void turnCounterClockwise() {
+		this.sensorVertical.deactivate();
 		this.turntablePosition = Math.max(0, this.turntablePosition - this.stepSize);
 		if (this.turntablePosition == 0) {
 			this.shape.conHorizontal();
