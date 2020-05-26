@@ -153,15 +153,15 @@ public class ConveyorShape{
 	public void setRelativePosition(float relativePosition) {
 		resetPosition();
 		if(relativePosition > 0 && relativePosition <= 20) {
-			rec1.setFill(ShapeHelper.ACTIVE);	
+			rec1.setFill(ShapeHelper.WORKPIECE_COLOR);	
 		}else if(relativePosition <= 40) {
-			rec2.setFill(ShapeHelper.ACTIVE);
+			rec2.setFill(ShapeHelper.WORKPIECE_COLOR);
 		}else if(relativePosition <= 60) {
-			rec3.setFill(ShapeHelper.ACTIVE);
+			rec3.setFill(ShapeHelper.WORKPIECE_COLOR);
 		}else if(relativePosition <= 80) {
-			rec4.setFill(ShapeHelper.ACTIVE);
+			rec4.setFill(ShapeHelper.WORKPIECE_COLOR);
 		}else {
-			rec5.setFill(ShapeHelper.ACTIVE);
+			rec5.setFill(ShapeHelper.WORKPIECE_COLOR);
 		}
 	}
 	
