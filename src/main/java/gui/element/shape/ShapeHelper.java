@@ -11,6 +11,6 @@ public class ShapeHelper {
 	public static Color GATE_OPEN = Color.GREEN;
 	public static Color GATE_CLOSED = Color.RED;
 	
-	public static Color WORKPIECE_COLOR;
+	public static Color WORKPIECE_COLOR = Color.BLUE;
 
 }
