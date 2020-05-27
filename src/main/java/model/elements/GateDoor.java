@@ -54,7 +54,6 @@ public class GateDoor extends MovingElement {
 		this.sensorClosed.deactivate();
 		this.doorPosition = Math.min(this.distance, this.doorPosition + this.stepSize);
 		if (this.doorPosition == this.distance) {
-			this.shape.doorIsOpen();
 			this.sensorOpen.activate();
 		} else {
 			this.sensorOpen.deactivate();
@@ -66,7 +65,6 @@ public class GateDoor extends MovingElement {
 		this.sensorOpen.deactivate();
 		this.doorPosition = Math.max(0, this.doorPosition - this.stepSize);
 		if (this.doorPosition == 0) {
-			this.shape.doorIsClosed();
 			this.sensorClosed.activate();
 		} else {
 			this.sensorClosed.deactivate();

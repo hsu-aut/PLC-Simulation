@@ -25,7 +25,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${project.artifactId}-${project.version}</finalName> <!-- Needed to remove suffix -->
+					<finalName>${project.artifactId}-${project.version}-full</finalName> <!-- Needed to remove suffix -->
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
@@ -104,7 +104,7 @@
 			<version>14</version>
 		</dependency>
 		<!-- This is actually not a good idea because it creates a windows-only 
-			buidl. Shouldn't be a problem becuase Mac users cannot participate as Codesys 
+			build. Shouldn't be a problem because Mac users cannot participate as Codesys 
 			doesn't exist for Mac. -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
