@@ -1,6 +1,5 @@
 package gui.element.shape;
 
-import gui.element.Direction;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,16 +16,7 @@ public class GateDoorShape {
 
 	}
 
-	public void doorIsOpen() {
-		rec.setFill(ShapeHelper.GATE_OPEN);
-	}
-
-	public void doorIsClosed() {
-		rec.setFill(ShapeHelper.GATE_CLOSED);
-	}
-
 	public void doorIsMoving() {
-		System.out.println("Door moving");
 		rec.setFill(ShapeHelper.ACTIVE);
 	}
 
