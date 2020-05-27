@@ -1,5 +1,8 @@
 package gui.element.shape;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
@@ -7,167 +10,173 @@ import javafx.scene.shape.Rectangle;
 
 public class ConveyorShape{
 	
-	private Rectangle rec1, rec2, rec3, rec4, rec5;
-	private Polyline left1, left2, left3, left4, right1, right2, right3, right4;
+	private double workPieceWidth = 20;
+	private final int workPieceHeight = 30;
+	private final int wpMargin = 8;
+	private final int arrowWidth = 14; 
+	private double numberOfWorkpieceRectangles;
 	
-	private int length;
+	private List<Rectangle> wpRectangles = new ArrayList<>();
+	private List<Polyline> leftArrows = new ArrayList<>();
+	private List<Polyline> rightArrows = new ArrayList<>();
+	private int activeWpRectangle = 1;
 	
-	public ConveyorShape(Pane pane, double posX, double posY, boolean horizontal) {
+	
+	public ConveyorShape(Pane pane, double posX, double posY, int length, boolean horizontal) {
+		numberOfWorkpieceRectangles = (length - this.wpMargin) / (this.workPieceWidth + this.wpMargin);
+		// correct width in case a width of 20 doesn't properly fit
+		this.workPieceWidth = (length - this.wpMargin) / Math.ceil(numberOfWorkpieceRectangles) - this.wpMargin;
 		if(horizontal) {
-			drawHorizontal(pane, posX, posY);
+			drawHorizontal(pane, posX, posY, length);
 		}else {
-			drawVertical(pane, posX, posY);
+			drawVertical(pane, posX, posY, length);
 		}
 	}
 	
-	private void drawHorizontal(Pane pane, double posX, double posY) {
-		Rectangle rectangle = new Rectangle(posX, posY, 160, 50);
-		rectangle.setFill(ShapeHelper.INACTIVE);
-		rectangle.setStroke(Color.BLACK);
-		pane.getChildren().add(rectangle);
-		rectangle = new Rectangle(posX, posY+50, 160, 20);
-		rectangle.setFill(ShapeHelper.INACTIVE);
-		rectangle.setStroke(Color.BLACK);
-		pane.getChildren().add(rectangle);
+	private void drawHorizontal(Pane pane, double posX, double posY, int length) {
+		Rectangle baseRectangle = new Rectangle(posX, posY, length, 50);
+		baseRectangle.setFill(ShapeHelper.INACTIVE);
+		baseRectangle.setStroke(Color.BLACK);
+		pane.getChildren().add(baseRectangle);
 		
-		rec1 = new Rectangle(posX+130, posY+10, 20, 30);
-		rec1.setStroke(Color.BLACK);
+		Rectangle lowerRectangle = new Rectangle(posX, posY+50, length, 20);
+		lowerRectangle.setFill(ShapeHelper.INACTIVE);
+		lowerRectangle.setStroke(Color.BLACK);
+		pane.getChildren().add(lowerRectangle);
 		
-		rec2 = new Rectangle(posX+100, posY+10, 20, 30);
-		rec2.setStroke(Color.BLACK);
-		
-		rec3 = new Rectangle(posX+70, posY+10, 20, 30);
-		rec3.setStroke(Color.BLACK);
-		
-		rec4 = new Rectangle(posX+40, posY+10, 20, 30);
-		rec4.setStroke(Color.BLACK);
-		
-		rec5 = new Rectangle(posX+10, posY+10, 20, 30);
-		rec5.setStroke(Color.BLACK);
-		pane.getChildren().addAll(rec1, rec2, rec3, rec4, rec5);
+		for (int i = 0; i < this.numberOfWorkpieceRectangles; i++) {
+			double wpX = posX + (i+1) * wpMargin + (i * workPieceWidth);
+			double wpY = posY + wpMargin;
+			Rectangle wpRectangle = new Rectangle(wpX, wpY, workPieceWidth, workPieceHeight);
+			wpRectangle.setStroke(Color.BLACK);
+			this.wpRectangles.add(wpRectangle);
+		}
+		pane.getChildren().addAll(wpRectangles);
 		resetPosition();
 		
-		left1 = new Polyline();
-		left1.getPoints().addAll(new Double[]{posX+15, posY+55, posX+5, posY+60, posX+15, posY+65, posX+15, posY+55});
-		left2 = new Polyline();
-		left2.getPoints().addAll(new Double[]{posX+35, posY+55, posX+25, posY+60, posX+35, posY+65, posX+35, posY+55});
-		left3 = new Polyline();
-		left3.getPoints().addAll(new Double[]{posX+55, posY+55, posX+45, posY+60, posX+55, posY+65, posX+55, posY+55});
-		left4 = new Polyline();
-		left4.getPoints().addAll(new Double[]{posX+75, posY+55, posX+65, posY+60, posX+75, posY+65, posX+75, posY+55});
 		
-		right1 = new Polyline();
-		right1.getPoints().addAll(new Double[]{posX+85, posY+55, posX+95, posY+60, posX+85, posY+65, posX+85, posY+55});
-		right2 = new Polyline();
-		right2.getPoints().addAll(new Double[]{posX+105, posY+55, posX+115, posY+60, posX+105, posY+65, posX+105, posY+55});
-		right3 = new Polyline();
-		right3.getPoints().addAll(new Double[]{posX+125, posY+55, posX+135, posY+60, posX+125, posY+65, posX+125, posY+55});
-		right4 = new Polyline();
-		right4.getPoints().addAll(new Double[]{posX+145, posY+55, posX+155, posY+60, posX+145, posY+65, posX+145, posY+55});
-		pane.getChildren().addAll(left1, left2, left3, left4, right1, right2, right3, right4);
+		for (int i = 0; i < (this.numberOfWorkpieceRectangles / 2); i++) {
+			Polyline leftArrow = new Polyline();
+			double xLeft = (posX + wpMargin) + i * (arrowWidth + wpMargin);
+			double xRight = (posX + wpMargin + arrowWidth) + i * (arrowWidth + wpMargin);
+			leftArrow.getPoints().addAll(new Double[]{xLeft, posY+60, xRight, posY+55, xRight, posY+65, xLeft, posY+60});
+			this.leftArrows.add(leftArrow);
+			pane.getChildren().add(leftArrow);
+		}
+		
+		for (int i = 0; i < (this.numberOfWorkpieceRectangles / 2); i++) {
+			Polyline rightArrow = new Polyline();
+			double xLeft = (posX + length - wpMargin - arrowWidth) - i * (arrowWidth + wpMargin);
+			double xRight = (posX + length - wpMargin) - i * (arrowWidth + wpMargin);
+			rightArrow.getPoints().addAll(new Double[]{xRight, posY+60, xLeft, posY+55, xLeft, posY+65, xRight, posY+60});
+			this.rightArrows.add(rightArrow);
+			pane.getChildren().add(rightArrow);
+		}
+		
 	}
 	
-	private void drawVertical(Pane pane, double posX, double posY) {
-		Rectangle rectangle = new Rectangle(posX+20, posY, 50, 160);
-		rectangle.setFill(Color.web("#dcdcdc"));
-		rectangle.setStroke(Color.BLACK);
-		pane.getChildren().add(rectangle);
-		rectangle = new Rectangle(posX, posY, 20, 160);
-		rectangle.setFill(Color.web("#dcdcdc"));
-		rectangle.setStroke(Color.BLACK);
-		pane.getChildren().add(rectangle);
+	
+	private void drawVertical(Pane pane, double posX, double posY, int length) {
+		Rectangle baseRectangle = new Rectangle(posX, posY, 50, length);
+		baseRectangle.setFill(ShapeHelper.INACTIVE);
+		baseRectangle.setStroke(Color.BLACK);
+		pane.getChildren().add(baseRectangle);
 		
-		rec1 = new Rectangle(posX+30, posY+130, 30, 20);
-		rec1.setStroke(Color.BLACK);
+		Rectangle lowerRectangle = new Rectangle(posX-20, posY, 20, length);
+		lowerRectangle.setFill(ShapeHelper.INACTIVE);
+		lowerRectangle.setStroke(Color.BLACK);
+		pane.getChildren().add(lowerRectangle);
 		
-		rec2 = new Rectangle(posX+30, posY+100, 30, 20);
-		rec2.setStroke(Color.BLACK);
+		for (int i = 0; i < this.numberOfWorkpieceRectangles; i++) {
+			double wpX = posX + wpMargin;
+			double wpY = posY + (i+1) * wpMargin + (i * workPieceWidth);
+			Rectangle wpRectangle = new Rectangle(wpX, wpY, workPieceHeight, workPieceWidth);
+			wpRectangle.setStroke(Color.BLACK);
+			this.wpRectangles.add(wpRectangle);
+		}
 		
-		rec3 = new Rectangle(posX+30, posY+70, 30, 20);
-		rec3.setStroke(Color.BLACK);
-		
-		rec4 = new Rectangle(posX+30, posY+40, 30, 20);
-		rec4.setStroke(Color.BLACK);
-		
-		rec5 = new Rectangle(posX+30, posY+10, 30, 20);
-		rec5.setStroke(Color.BLACK);
-		pane.getChildren().addAll(rec1, rec2, rec3, rec4, rec5);
+		pane.getChildren().addAll(wpRectangles);
 		resetPosition();
 		
-		left1 = new Polyline();
-		left1.getPoints().addAll(new Double[]{posX+5, posY+15, posX+10, posY+5, posX+15, posY+15, posX+5, posY+15});
-		left2 = new Polyline();
-		left2.getPoints().addAll(new Double[]{posX+5, posY+35, posX+10, posY+25, posX+15, posY+35, posX+5, posY+35});
-		left3 = new Polyline();
-		left3.getPoints().addAll(new Double[]{posX+5, posY+55, posX+10, posY+45, posX+15, posY+55, posX+5, posY+55});
-		left4 = new Polyline();
-		left4.getPoints().addAll(new Double[]{posX+5, posY+75, posX+10, posY+65, posX+15, posY+75, posX+5, posY+75});
 		
-		right1 = new Polyline();
-		right1.getPoints().addAll(new Double[]{posX+5, posY+85, posX+10, posY+95, posX+15, posY+85, posX+5, posY+85});
-		right2 = new Polyline();
-		right2.getPoints().addAll(new Double[]{posX+5, posY+105, posX+10, posY+115, posX+15, posY+105, posX+5, posY+105});
-		right3 = new Polyline();
-		right3.getPoints().addAll(new Double[]{posX+5, posY+125, posX+10, posY+135, posX+15, posY+125, posX+5, posY+125});
-		right4 = new Polyline();
-		right4.getPoints().addAll(new Double[]{posX+5, posY+145, posX+10, posY+155, posX+15, posY+145, posX+5, posY+145});
-		pane.getChildren().addAll(left1, left2, left3, left4, right1, right2, right3, right4);
+		for (int i = 0; i < (this.numberOfWorkpieceRectangles / 2); i++) {
+			Polyline leftArrow = new Polyline();
+			double yTop = (posY + wpMargin) + i * (arrowWidth + wpMargin);
+			double yBottom = (posY + wpMargin + arrowWidth) + i * (arrowWidth + wpMargin);
+			leftArrow.getPoints().addAll(new Double[]{posX - 10, yTop, posX -15, yBottom, posX - 5, yBottom, posX - 10, yTop});
+			this.leftArrows.add(leftArrow);
+			pane.getChildren().add(leftArrow);
+		}
+		
+		for (int i = 0; i < (this.numberOfWorkpieceRectangles / 2); i++) {
+			Polyline leftArrow = new Polyline();
+			double yTop = (posY + length - wpMargin - arrowWidth) - i * (arrowWidth + wpMargin);
+			double yBottom = (posY + length - wpMargin) - i * (arrowWidth + wpMargin);
+			leftArrow.getPoints().addAll(new Double[]{posX - 10, yBottom, posX -15, yTop, posX - 5, yTop, posX - 10, yBottom});
+			this.leftArrows.add(leftArrow);
+			pane.getChildren().add(leftArrow);
+		}
+		
+		
 	}
 	
 	public void activateLeft() {
-		left1.setFill(ShapeHelper.ACTIVE);
-		left2.setFill(ShapeHelper.ACTIVE);
-		left3.setFill(ShapeHelper.ACTIVE);
-		left4.setFill(ShapeHelper.ACTIVE);
-	}
-	
-	public void deactivateLeft() {
-		left1.setFill(ShapeHelper.INACTIVE);
-		left2.setFill(ShapeHelper.INACTIVE);
-		left3.setFill(ShapeHelper.INACTIVE);
-		left4.setFill(ShapeHelper.INACTIVE);
-	}
-	
-	public void activateRight() {
-		right1.setFill(ShapeHelper.ACTIVE);
-		right2.setFill(ShapeHelper.ACTIVE);
-		right3.setFill(ShapeHelper.ACTIVE);
-		right4.setFill(ShapeHelper.ACTIVE);
-	}
-	
-	public void deactivateRight() {
-		right1.setFill(ShapeHelper.INACTIVE);
-		right2.setFill(ShapeHelper.INACTIVE);
-		right3.setFill(ShapeHelper.INACTIVE);
-		right4.setFill(ShapeHelper.INACTIVE);
-	}
-	
-	public void resetPosition() {
-		rec1.setFill(ShapeHelper.INACTIVE);
-		rec2.setFill(ShapeHelper.INACTIVE);
-		rec3.setFill(ShapeHelper.INACTIVE);
-		rec4.setFill(ShapeHelper.INACTIVE);
-		rec5.setFill(ShapeHelper.INACTIVE);
-	}
-	
-	public void setRelativePosition(float relativePosition) {
-		resetPosition();
-		if(relativePosition > 0 && relativePosition <= 20) {
-			rec1.setFill(ShapeHelper.WORKPIECE_COLOR);	
-		}else if(relativePosition <= 40) {
-			rec2.setFill(ShapeHelper.WORKPIECE_COLOR);
-		}else if(relativePosition <= 60) {
-			rec3.setFill(ShapeHelper.WORKPIECE_COLOR);
-		}else if(relativePosition <= 80) {
-			rec4.setFill(ShapeHelper.WORKPIECE_COLOR);
-		}else {
-			rec5.setFill(ShapeHelper.WORKPIECE_COLOR);
+		for (Polyline arrow : leftArrows) {
+			arrow.setFill(ShapeHelper.ACTIVE);
 		}
 	}
 	
-	// TODO: Not good, should be set via constructor (resulting changes: pane should be in simulation, passing only coordinates and type to conveyor)
-	public void setLength(int length) {
-		this.length = length;
+	public void deactivateLeft() {
+		for (Polyline arrow : leftArrows) {
+			arrow.setFill(ShapeHelper.INACTIVE);
+		}
 	}
+	
+	public void activateRight() {
+		for (Polyline arrow : rightArrows) {
+			arrow.setFill(ShapeHelper.ACTIVE);
+		}
+	}
+	
+	public void deactivateRight() {
+		for (Polyline arrow : rightArrows) {
+			arrow.setFill(ShapeHelper.INACTIVE);
+		}
+	}
+	
+	public void resetPosition() {
+		for (Rectangle rect : this.wpRectangles) {
+			rect.setFill(ShapeHelper.INACTIVE);
+		}
+	}
+	
+	public void addWorkpiece(boolean onRight) {
+		if(onRight) {
+			this.activeWpRectangle = this.wpRectangles.size() -1;
+		} else {
+			this.activeWpRectangle = 0;
+		}
+		this.wpRectangles.get(activeWpRectangle).setFill(ShapeHelper.WORKPIECE_COLOR);
+	}
+	
+	public void moveLeft(float relativePosition) {
+		float relWpSize = 100f / this.wpRectangles.size();
+		if (relativePosition < this.activeWpRectangle * relWpSize) {
+			this.wpRectangles.get(activeWpRectangle).setFill(ShapeHelper.INACTIVE);
+			Math.max(0, this.activeWpRectangle--);
+			this.wpRectangles.get(activeWpRectangle).setFill(ShapeHelper.WORKPIECE_COLOR);
+		}
+	}
+	
+	public void moveRight(float relativePosition) {
+		resetPosition();
+		float relWpSize = 100f / this.wpRectangles.size();
+		if (relativePosition > this.activeWpRectangle * relWpSize) {
+			this.wpRectangles.get(activeWpRectangle).setFill(ShapeHelper.INACTIVE);
+			Math.min(this.wpRectangles.size(), this.activeWpRectangle++);
+			this.wpRectangles.get(activeWpRectangle).setFill(ShapeHelper.WORKPIECE_COLOR);
+		}
+	}
+
 	
 }

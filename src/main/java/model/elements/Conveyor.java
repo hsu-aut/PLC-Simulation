@@ -1,6 +1,8 @@
 package model.elements;
 
+import gui.element.Direction;
 import gui.element.shape.ConveyorShape;
+import javafx.scene.layout.Pane;
 import model.simulation.FtPlantSimulation;
 
 /**
@@ -14,13 +16,12 @@ public class Conveyor extends MovingElement {
 
 	private boolean workpiecePresent = false;
 	private boolean workpieceBlocked = false;
-	private int workpiecePosition = 0;
+	private int workpiecePosition;
 
-	public Conveyor(SimulationElementName elementName, ConveyorShape shape, ActuatorDefinition motorLeft, ActuatorDefinition motorRight,
+	public Conveyor(SimulationElementName elementName, Pane pane, double x, double y, boolean horizontal, ActuatorDefinition motorLeft, ActuatorDefinition motorRight,
 			FtPlantSimulation simulation, int length) {
 		super(simulation, length);
-		this.shape = shape;
-		this.shape.setLength(length);
+		this.shape = new ConveyorShape(pane, x, y, length, horizontal);
 		this.simulationElementName = elementName;
 		this.motorLeft = new BinaryActuator(motorLeft, simulation);
 		this.motorRight = new BinaryActuator(motorRight, simulation);
@@ -39,8 +40,15 @@ public class Conveyor extends MovingElement {
 	/**
 	 * Moves a workpiece to this conveyor
 	 */
-	public void addWorkpiece() {
+	public void addWorkpiece(boolean onRight) {
+		this.shape.addWorkpiece(true);
 		this.workpiecePresent = true;
+		
+		if(onRight) {
+			this.workpiecePosition = this.distance;
+		} else {
+			this.workpiecePosition = 0;
+		}
 	}
 
 	/**
@@ -49,7 +57,6 @@ public class Conveyor extends MovingElement {
 	public void removeWorkpiece() {
 		this.workpiecePresent = false;
 		this.shape.resetPosition();
-		this.workpiecePosition = 0;
 	}
 
 	public void blockWorkpiece() {
@@ -86,9 +93,9 @@ public class Conveyor extends MovingElement {
 	 */
 	public void update() {
 		if (this.motorLeft.isOn() && this.workpiecePresent && !this.workpieceBlocked) {
-			this.workpiecePosition = Math.min(this.distance, this.workpiecePosition + this.stepSize);
-
-			this.shape.setRelativePosition(this.getRelativeWorkpiecePosition());
+			this.workpiecePosition = Math.max(0, this.workpiecePosition - this.stepSize);
+			this.shape.moveLeft(this.getRelativeWorkpiecePosition());
+//			this.shape.setRelativePosition(this.getRelativeWorkpiecePosition());
 		}
 
 		if (this.motorLeft.isOn()) {
