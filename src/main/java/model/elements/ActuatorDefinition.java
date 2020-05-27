@@ -19,7 +19,15 @@ public enum ActuatorDefinition {
 	B1_A13("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A13", "rechten Flügel schließen"),
 	B1_A14("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A14", "rechten Flügel öffnen"),
 	B1_A15("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A15", "linken Flügel schließen"),
-	B1_A16("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A16", "linken Flügel öffnen");
+	B1_A16("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A16", "linken Flügel öffnen"),
+	
+	B1_A20("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A20", "Drehtisch Förderband"),
+	B1_A21("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A21", "Drehtisch gegen UZS drehen"),
+	B1_A22("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A22", "Drehtisch im UZS drehen"),
+	B1_A23("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A23", "Förderband ganz links"),
+	B1_A24("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.B1_A24", "Förderband oberhalb Drehtisch"),
+	
+	NULL("ns=4;s=|var|CODESYS Control Win V3 x64.Application.Globale_Variablen.Null", "UNDEFINED ACTUATOR");
 	
 	String nodeIdString;
 	String comment;
