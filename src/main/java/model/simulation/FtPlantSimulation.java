@@ -145,7 +145,7 @@ public class FtPlantSimulation {
 				this.wpState = WorkpieceState.OnConveyor1;
 				// assumption: workpiece gets always placed on first conveyor so that sensor can detect it
 				sensorConveyor1.activate();
-				conveyor1.addWorkpiece();
+				conveyor1.addWorkpiece(true);
 			}
 			break;
 		}
@@ -155,18 +155,18 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
 
 			// Set sensor to false if workpiece moves out of the detection area
-			if (conveyor1.getRelativeWorkpiecePosition() > 40) {
+			if (conveyor1.getRelativeWorkpiecePosition() < 60) {
 				sensorConveyor1.deactivate();
 			}
 
-			if (conveyor1.getRelativeWorkpiecePosition() > 80 && !colorCodeSent) {
+			if (conveyor1.getRelativeWorkpiecePosition() < 20 && !colorCodeSent) {
 				triggerColorSensors();
 			}
 
 			// Push workpiece to conveyor 2
-			if (conveyor1.getRelativeWorkpiecePosition() == 100 && conveyor1.getMotorLeft().isOn() && conveyor2.getMotorLeft().isOn()) {
+			if (conveyor1.getRelativeWorkpiecePosition() == 0 && conveyor1.getMotorLeft().isOn() && conveyor2.getMotorLeft().isOn()) {
 				conveyor1.removeWorkpiece();
-				conveyor2.addWorkpiece();
+				conveyor2.addWorkpiece(true);
 				this.wpState = WorkpieceState.OnConveyor2;
 				this.controller.log("Simulation update: Moving workpiece to conveyor 2");
 			}
@@ -178,16 +178,16 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor2 = this.sensors.get(SensorDefinition.B1_S03);
 
 			// switch on sensor if workpiece gets in detection area
-			if (conveyor2.getRelativeWorkpiecePosition() > 40 && conveyor2.getRelativeWorkpiecePosition() < 60) {
+			if (conveyor2.getRelativeWorkpiecePosition() < 60 && conveyor2.getRelativeWorkpiecePosition() > 40) {
 				sensorConveyor2.activate();
 			} else {
 				sensorConveyor2.deactivate();
 			}
 
 			// Push workpiece to conveyor 3
-			if (conveyor2.getRelativeWorkpiecePosition() == 100 && conveyor2.getMotorLeft().isOn() && conveyor3.getMotorLeft().isOn()) {
+			if (conveyor2.getRelativeWorkpiecePosition() == 0 && conveyor2.getMotorLeft().isOn() && conveyor3.getMotorLeft().isOn()) {
 				conveyor2.removeWorkpiece();
-				conveyor3.addWorkpiece();
+				conveyor3.addWorkpiece(true);
 				this.wpState = WorkpieceState.OnConveyor3;
 				this.controller.log("Simulation update: Moving workpiece to conveyor 3");
 			}
@@ -199,16 +199,16 @@ public class FtPlantSimulation {
 			BinarySensor sensorConveyor3 = this.sensors.get(SensorDefinition.B1_S07);
 
 			// switch on sensor if workpiece gets in detection area
-			if (conveyor3.getRelativeWorkpiecePosition() > 40 && conveyor3.getRelativeWorkpiecePosition() < 60) {
+			if (conveyor3.getRelativeWorkpiecePosition() < 60 && conveyor3.getRelativeWorkpiecePosition() > 40) {
 				sensorConveyor3.activate();
 			} else {
 				sensorConveyor3.deactivate();
 			}
 
 			// Push workpiece to conveyor 4
-			if (conveyor3.getRelativeWorkpiecePosition() == 100 && conveyor3.getMotorLeft().isOn() && conveyor4.getMotorLeft().isOn()) {
+			if (conveyor3.getRelativeWorkpiecePosition() == 0 && conveyor3.getMotorLeft().isOn() && conveyor4.getMotorLeft().isOn()) {
 				conveyor3.removeWorkpiece();
-				conveyor4.addWorkpiece();
+				conveyor4.addWorkpiece(true);
 				this.wpState = WorkpieceState.BeginConveyor4;
 				this.controller.log("Simulation update: Moving workpiece to conveyor 4");
 			}
@@ -221,19 +221,19 @@ public class FtPlantSimulation {
 			Gate gate = (Gate) this.updateables.get(SimulationElementName.Gate);
 
 			// switch on sensor if workpiece gets in detection area
-			if (conveyor4.getRelativeWorkpiecePosition() > 8 && conveyor4.getRelativeWorkpiecePosition() < 15) {
+			if (conveyor4.getRelativeWorkpiecePosition() <92 && conveyor4.getRelativeWorkpiecePosition() > 85) {
 				b1_s08.activate();
 			} else {
 				b1_s08.deactivate();
 			}
 
-			if (conveyor4.getRelativeWorkpiecePosition() > 25 && conveyor4.getRelativeWorkpiecePosition() < 35) {
+			if (conveyor4.getRelativeWorkpiecePosition() < 65 && conveyor4.getRelativeWorkpiecePosition() > 55) {
 				b1_s16.activate();
 			} else {
 				b1_s16.deactivate();
 			}
 
-			if (conveyor4.getRelativeWorkpiecePosition() >= 40 && conveyor4.getMotorLeft().isOn()) {
+			if (conveyor4.getRelativeWorkpiecePosition() <= 50 && conveyor4.getMotorLeft().isOn()) {
 
 				if (gate.isOpen()) {
 					this.controller.log("Simulation update: Transporting Workpiece trough the gate");
@@ -254,17 +254,17 @@ public class FtPlantSimulation {
 			BinarySensor b1_s17 = this.sensors.get(SensorDefinition.B1_S17);
 			BinarySensor b1_s09 = this.sensors.get(SensorDefinition.B1_S09);
 
-			if (conveyor4.getRelativeWorkpiecePosition() > 45 && conveyor4.getRelativeWorkpiecePosition() < 60) {
+			if (conveyor4.getRelativeWorkpiecePosition() < 40 && conveyor4.getRelativeWorkpiecePosition() > 30) {
 				b1_s17.activate();
 			} else {
 				b1_s17.deactivate();
 			}
 
-			if (conveyor4.getRelativeWorkpiecePosition() > 85) {
+			if (conveyor4.getRelativeWorkpiecePosition() < 12) {
 				b1_s09.activate();
 			}
 
-			if (conveyor4.getMotorLeft().isOn() && conveyor4.getRelativeWorkpiecePosition() == 100) {
+			if (conveyor4.getMotorLeft().isOn() && conveyor4.getRelativeWorkpiecePosition() == 0) {
 
 				if (turntable.isVertical()) {
 					this.controller.warn("Workpiece is crashing into the Turntable! The turntable is turned vertically.");
@@ -274,7 +274,7 @@ public class FtPlantSimulation {
 					this.controller.log("Simulation update: Moving workpiece onto the turntable");
 					this.wpState = WorkpieceState.OnTurntable;
 					conveyor4.removeWorkpiece();
-					conveyorOnTurntable.addWorkpiece();
+					conveyorOnTurntable.addWorkpiece(true);
 				}
 			}
 
@@ -288,25 +288,25 @@ public class FtPlantSimulation {
 
 			BinarySensor b1_s20 = this.sensors.get(SensorDefinition.B1_S20);
 
-			if (conveyorOnTurntable.getRelativeWorkpiecePosition() > 45 && conveyorOnTurntable.getRelativeWorkpiecePosition() < 60) {
+			if (conveyorOnTurntable.getRelativeWorkpiecePosition() < 55 && conveyorOnTurntable.getRelativeWorkpiecePosition() > 40) {
 				b1_s20.activate();
 			} else {
 				b1_s20.deactivate();
 			}
 
-			if (conveyorOnTurntable.getRelativeWorkpiecePosition() == 100 && conveyorOnTurntable.getMotorLeft().isOn()) {
+			if (conveyorOnTurntable.getRelativeWorkpiecePosition() == 0 && conveyorOnTurntable.getMotorLeft().isOn()) {
 
 				if (turntable.isHorizontal() && conveyorLeft.getMotorLeft().isOn()) {
 					this.controller.log("Simulation update: Moving workpiece to left conveyor");
 					this.wpState = WorkpieceState.OnLeftConveyor;
 					conveyorOnTurntable.removeWorkpiece();
-					conveyorLeft.addWorkpiece();
+					conveyorLeft.addWorkpiece(true);
 				}
 				if (turntable.isVertical() && conveyorLeft.getMotorLeft().isOn()) {
 					this.controller.log("Moving workpiece to upper conveyor");
 					this.wpState = WorkpieceState.OnUpperConveyor;
 					conveyorOnTurntable.removeWorkpiece();
-					conveyorTop.addWorkpiece();
+					conveyorTop.addWorkpiece(true);
 				}
 			}
 
@@ -316,7 +316,7 @@ public class FtPlantSimulation {
 			Conveyor conveyorLeft = (Conveyor) this.updateables.get(SimulationElementName.ConveyorLeft);
 			BinarySensor b1_s23 = this.sensors.get(SensorDefinition.B1_S23);
 
-			if (conveyorLeft.getRelativeWorkpiecePosition() > 45 && conveyorLeft.getRelativeWorkpiecePosition() < 60) {
+			if (conveyorLeft.getRelativeWorkpiecePosition() < 55 && conveyorLeft.getRelativeWorkpiecePosition() > 40) {
 				b1_s23.activate();
 			} else {
 				b1_s23.deactivate();
@@ -327,7 +327,7 @@ public class FtPlantSimulation {
 			Conveyor conveyorTop = (Conveyor) this.updateables.get(SimulationElementName.ConveyorTop);
 			BinarySensor b1_s24 = this.sensors.get(SensorDefinition.B1_S24);
 
-			if (conveyorTop.getRelativeWorkpiecePosition() > 45 && conveyorTop.getRelativeWorkpiecePosition() < 60) {
+			if (conveyorTop.getRelativeWorkpiecePosition() < 55 && conveyorTop.getRelativeWorkpiecePosition() > 40) {
 				b1_s24.activate();
 			} else {
 				b1_s24.deactivate();
@@ -361,6 +361,7 @@ public class FtPlantSimulation {
 		}
 	}
 
+	
 	private void triggerColorSensors() {
 		
 		this.colorCodeSent = true;

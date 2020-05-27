@@ -21,16 +21,16 @@ public class Turntable extends MovingElement {
 	 * @param simulation
 	 * @param turnClockwise
 	 * @param turnCounterClockwise
-	 * @param diameter
+	 * @param radius
 	 */
-	public Turntable(SimulationElementName elementName, FtPlantSimulation simulation, TurntableShape shape, ActuatorDefinition turnClockwise, ActuatorDefinition turnCounterClockwise, BinarySensor sensorHorizontal, BinarySensor sensorVertical, int diameter, ActuatorDefinition actuatorConveyorLeft, ActuatorDefinition actuatorConveyorRight) {
+	public Turntable(SimulationElementName elementName, FtPlantSimulation simulation, TurntableShape shape, ActuatorDefinition turnClockwise, ActuatorDefinition turnCounterClockwise, BinarySensor sensorHorizontal, BinarySensor sensorVertical, int radius, ActuatorDefinition actuatorConveyorLeft, ActuatorDefinition actuatorConveyorRight) {
 
-		super(simulation, diameter);
+		super(simulation, radius);
 		this.simulationElementName = elementName;
 		this.shape = shape;
 		Pane conveyorPane = new Pane();
-		int conveyorLength = (int) ((float) 0.8 * diameter);
-		this.conveyor = new Conveyor(SimulationElementName.ConveyorOnTurntable, new ConveyorShape(conveyorPane, 0, 45, true), actuatorConveyorLeft, actuatorConveyorRight, simulation, conveyorLength);
+		int conveyorLength = (int) ((float) 0.95 * 2 * radius);
+		this.conveyor = new Conveyor(SimulationElementName.ConveyorOnTurntable, conveyorPane, 10, 45, true, actuatorConveyorLeft, actuatorConveyorRight, simulation, conveyorLength);
 		this.shape.addConveyorPane(conveyorPane);
 		this.turnClockwise = new BinaryActuator(turnClockwise, simulation);
 		this.turnCounterClockwise = new BinaryActuator(turnCounterClockwise, simulation);
