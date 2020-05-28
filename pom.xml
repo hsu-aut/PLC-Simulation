@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.hsu-hh.aut</groupId>
 	<artifactId>ft-lab-simulation</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>FT Lab Simulation</name>
 	<description>Simple Simulation of an automated lab plant</description>
 
