@@ -16,6 +16,7 @@ import gui.Controller;
 import gui.element.shape.ShapeHelper;
 import javafx.scene.paint.Color;
 import model.elements.BinarySensor;
+import model.elements.BinarySwitch;
 import model.elements.Conveyor;
 import model.elements.Gate;
 import model.elements.SensorDefinition;
@@ -137,16 +138,23 @@ public class FtPlantSimulation {
 
 		switch (this.wpState) {
 		case AtStorage: {
-			setRandomWorkpieceColor();
 			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
+			BinarySwitch b1_S06 = (BinarySwitch) this.sensors.get(SensorDefinition.B1_S06);
+			
+			if(b1_S06.getState() == true) {
+				setRandomWorkpieceColor();
+				this.storageModule.getWorkpiece();
+			}
+			
 			if (this.storageModule.isGettingWorkpiece()) {
 				this.controller.log("Simulation update: Getting workpiece from storage");
-				this.wpState = WorkpieceState.OnConveyor1;
 				// assumption: workpiece gets always placed on first conveyor so that sensor can detect it
 				sensorConveyor1.activate();
 				conveyor1.addWorkpiece(true);
+				this.wpState = WorkpieceState.OnConveyor1;
 			}
+			
 			break;
 		}
 		case OnConveyor1: {
