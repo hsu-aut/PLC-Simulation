@@ -16,6 +16,7 @@ import gui.Controller;
 import gui.element.shape.ShapeHelper;
 import javafx.scene.paint.Color;
 import model.elements.BinarySensor;
+import model.elements.BinarySwitch;
 import model.elements.Conveyor;
 import model.elements.Gate;
 import model.elements.SensorDefinition;
@@ -137,16 +138,23 @@ public class FtPlantSimulation {
 
 		switch (this.wpState) {
 		case AtStorage: {
-			setRandomWorkpieceColor();
 			Conveyor conveyor1 = (Conveyor) this.updateables.get(SimulationElementName.Conveyor1);
 			BinarySensor sensorConveyor1 = this.sensors.get(SensorDefinition.B1_S02);
+			BinarySwitch b1_S06 = (BinarySwitch) this.sensors.get(SensorDefinition.B1_S06);
+			
+			if(b1_S06.getState() == true) {
+				setRandomWorkpieceColor();
+				this.storageModule.getWorkpiece();
+			}
+			
 			if (this.storageModule.isGettingWorkpiece()) {
 				this.controller.log("Simulation update: Getting workpiece from storage");
-				this.wpState = WorkpieceState.OnConveyor1;
 				// assumption: workpiece gets always placed on first conveyor so that sensor can detect it
 				sensorConveyor1.activate();
 				conveyor1.addWorkpiece(true);
+				this.wpState = WorkpieceState.OnConveyor1;
 			}
+			
 			break;
 		}
 		case OnConveyor1: {
@@ -254,7 +262,7 @@ public class FtPlantSimulation {
 			BinarySensor b1_s17 = this.sensors.get(SensorDefinition.B1_S17);
 			BinarySensor b1_s09 = this.sensors.get(SensorDefinition.B1_S09);
 
-			if (conveyor4.getRelativeWorkpiecePosition() < 40 && conveyor4.getRelativeWorkpiecePosition() > 30) {
+			if (conveyor4.getRelativeWorkpiecePosition() < 35 && conveyor4.getRelativeWorkpiecePosition() > 20) {
 				b1_s17.activate();
 			} else {
 				b1_s17.deactivate();
@@ -273,6 +281,7 @@ public class FtPlantSimulation {
 				if (turntable.isHorizontal() && turntable.getConveyor().getMotorLeft().isOn()) {
 					this.controller.log("Simulation update: Moving workpiece onto the turntable");
 					this.wpState = WorkpieceState.OnTurntable;
+					b1_s09.deactivate();
 					conveyor4.removeWorkpiece();
 					conveyorOnTurntable.addWorkpiece(true);
 				}
@@ -302,7 +311,7 @@ public class FtPlantSimulation {
 					conveyorOnTurntable.removeWorkpiece();
 					conveyorLeft.addWorkpiece(true);
 				}
-				if (turntable.isVertical() && conveyorLeft.getMotorLeft().isOn()) {
+				if (turntable.isVertical() && conveyorTop.getMotorLeft().isOn()) {
 					this.controller.log("Moving workpiece to upper conveyor");
 					this.wpState = WorkpieceState.OnUpperConveyor;
 					conveyorOnTurntable.removeWorkpiece();
@@ -321,6 +330,11 @@ public class FtPlantSimulation {
 			} else {
 				b1_s23.deactivate();
 			}
+			
+			if (conveyorLeft.getRelativeWorkpiecePosition() == 0) {
+				conveyorLeft.removeWorkpiece();
+				this.wpState = WorkpieceState.AtStorage;
+			}
 			break;
 		}
 		case OnUpperConveyor: {
@@ -332,6 +346,12 @@ public class FtPlantSimulation {
 			} else {
 				b1_s24.deactivate();
 			}
+			
+			if (conveyorTop.getRelativeWorkpiecePosition() == 0) {
+				conveyorTop.removeWorkpiece();
+				this.wpState = WorkpieceState.AtStorage;
+			}
+			
 			break;
 		}
 		}
@@ -369,12 +389,15 @@ public class FtPlantSimulation {
 		BinarySensor sensorRight = this.sensors.get(SensorDefinition.B1_S05);
 		BinarySensor sensorLeft = this.sensors.get(SensorDefinition.B1_S04);
 		
-		SensorTrigger sensorRightTrigger = new SensorTrigger(sensorRight, numberOfMagnetsRight, 200);
-		SensorTrigger sensorLeftTrigger = new SensorTrigger(sensorLeft, numberOfMagnetsLeft, 200);
+		SensorTrigger sensorRightTrigger = new SensorTrigger(sensorRight, numberOfMagnetsRight, 300);
+		SensorTrigger sensorLeftTrigger = new SensorTrigger(sensorLeft, numberOfMagnetsLeft, 300);
 		
 		ExecutorService executorRight = Executors.newCachedThreadPool();
+		ExecutorService executorLeft = Executors.newCachedThreadPool();
 		executorRight.submit(sensorRightTrigger);
-		executorRight.submit(sensorLeftTrigger);
+		executorLeft.submit(sensorLeftTrigger);
+		
+		executorLeft.shutdown();
 		executorRight.shutdown();
 	}
 	
