@@ -17,16 +17,16 @@ public class SensorTrigger implements Runnable {
 	public void run() {
 		for (int i = 0; i < triggerAmount; i++) {
 			System.out.println("trigger sensor: " + this.sensor.getTagName() + " for time: " + i);
-			this.sensor.activate();
 			
 			try {
 				Thread.sleep(this.waitTime);
+				this.sensor.activate();
+				Thread.sleep(this.waitTime);
+				this.sensor.deactivate();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			this.sensor.deactivate();
 		}
 	}
 

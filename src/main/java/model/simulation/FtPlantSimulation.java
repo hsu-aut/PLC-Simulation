@@ -262,7 +262,7 @@ public class FtPlantSimulation {
 			BinarySensor b1_s17 = this.sensors.get(SensorDefinition.B1_S17);
 			BinarySensor b1_s09 = this.sensors.get(SensorDefinition.B1_S09);
 
-			if (conveyor4.getRelativeWorkpiecePosition() < 40 && conveyor4.getRelativeWorkpiecePosition() > 30) {
+			if (conveyor4.getRelativeWorkpiecePosition() < 35 && conveyor4.getRelativeWorkpiecePosition() > 20) {
 				b1_s17.activate();
 			} else {
 				b1_s17.deactivate();
@@ -281,6 +281,7 @@ public class FtPlantSimulation {
 				if (turntable.isHorizontal() && turntable.getConveyor().getMotorLeft().isOn()) {
 					this.controller.log("Simulation update: Moving workpiece onto the turntable");
 					this.wpState = WorkpieceState.OnTurntable;
+					b1_s09.deactivate();
 					conveyor4.removeWorkpiece();
 					conveyorOnTurntable.addWorkpiece(true);
 				}
@@ -310,7 +311,7 @@ public class FtPlantSimulation {
 					conveyorOnTurntable.removeWorkpiece();
 					conveyorLeft.addWorkpiece(true);
 				}
-				if (turntable.isVertical() && conveyorLeft.getMotorLeft().isOn()) {
+				if (turntable.isVertical() && conveyorTop.getMotorLeft().isOn()) {
 					this.controller.log("Moving workpiece to upper conveyor");
 					this.wpState = WorkpieceState.OnUpperConveyor;
 					conveyorOnTurntable.removeWorkpiece();
@@ -329,6 +330,11 @@ public class FtPlantSimulation {
 			} else {
 				b1_s23.deactivate();
 			}
+			
+			if (conveyorLeft.getRelativeWorkpiecePosition() == 0) {
+				conveyorLeft.removeWorkpiece();
+				this.wpState = WorkpieceState.AtStorage;
+			}
 			break;
 		}
 		case OnUpperConveyor: {
@@ -340,6 +346,12 @@ public class FtPlantSimulation {
 			} else {
 				b1_s24.deactivate();
 			}
+			
+			if (conveyorTop.getRelativeWorkpiecePosition() == 0) {
+				conveyorTop.removeWorkpiece();
+				this.wpState = WorkpieceState.AtStorage;
+			}
+			
 			break;
 		}
 		}
@@ -377,12 +389,15 @@ public class FtPlantSimulation {
 		BinarySensor sensorRight = this.sensors.get(SensorDefinition.B1_S05);
 		BinarySensor sensorLeft = this.sensors.get(SensorDefinition.B1_S04);
 		
-		SensorTrigger sensorRightTrigger = new SensorTrigger(sensorRight, numberOfMagnetsRight, 200);
-		SensorTrigger sensorLeftTrigger = new SensorTrigger(sensorLeft, numberOfMagnetsLeft, 200);
+		SensorTrigger sensorRightTrigger = new SensorTrigger(sensorRight, numberOfMagnetsRight, 300);
+		SensorTrigger sensorLeftTrigger = new SensorTrigger(sensorLeft, numberOfMagnetsLeft, 300);
 		
 		ExecutorService executorRight = Executors.newCachedThreadPool();
+		ExecutorService executorLeft = Executors.newCachedThreadPool();
 		executorRight.submit(sensorRightTrigger);
-		executorRight.submit(sensorLeftTrigger);
+		executorLeft.submit(sensorLeftTrigger);
+		
+		executorLeft.shutdown();
 		executorRight.shutdown();
 	}
 	
